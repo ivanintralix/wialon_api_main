@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import usuarioReducer from "./usuarioReducer";
-import unidadesReducer from "./unidadesReducer";
+import gruposReducer from "./gruposReducer";
 
 export default combineReducers({
     usuario: usuarioReducer,
-    unidades: unidadesReducer,
+    grupos: gruposReducer,
 });

@@ -6,13 +6,15 @@ import { FaCog, FaLock, FaWrench, FaSignOutAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../store/actions/usuarioActions";
 import { useHistory } from "react-router-dom";
+
+import { Link } from "react-router-dom";
 const MenuLateral = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [collapsed, setCollapsed] = useState(true);
-  
+
   const outSidebar = () => {
     setCollapsed(true)
   }
@@ -26,7 +28,7 @@ const MenuLateral = () => {
     dispatch( logoutAction() );
     history.push('/login');
   }
-  return ( 
+  return (
     <ProSidebar
       className='sidebarinicio'
       collapsed={collapsed}
@@ -46,18 +48,23 @@ const MenuLateral = () => {
             whiteSpace: 'nowrap',
           }}
         >
-          <FaLock 
+          <FaLock
             onClick={() => openSidebar()}
           />
         </div>
       </SidebarHeader>
       <SidebarContent>
         <Menu iconShape="round">
-          <MenuItem icon={<FaLock />}>Panel</MenuItem>
-          <MenuItem icon={<FaWrench />}>Equipos</MenuItem>
-          <MenuItem icon={<FaCog />}>Programción</MenuItem>
+          <MenuItem icon={<FaLock />}>
+            <Link to={'/panel'} className="text-light">Panel</Link>
+          </MenuItem>
+          <MenuItem icon={<FaWrench />}>
+            <Link to={'/Equipos'} className="text-light">Equipos</Link>
+          </MenuItem>
+          <MenuItem icon={<FaCog />}>
+            Programción
+          </MenuItem>
         </Menu>
-        
       </SidebarContent>
       <SidebarFooter>
           <Menu iconShape="circle">

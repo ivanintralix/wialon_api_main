@@ -1,0 +1,59 @@
+/*
+        colores dominantes corporativos
+        #15375b
+        #1269b3
+        #98c13c
+        colores subordinados/complementarios
+        #37bdee
+        #0a7b3e
+*/
+body {
+    font-family: "Helvetica Neue" !important;
+    font-weight: lighter !important;
+}
+p, label {
+    font-family: "Helvetica Neue" !important;
+    font-weight: lighter !important;
+    font-size: 1rem !important;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Helvetica Neue" !important;
+}
+input {
+    border: 0 !important;
+    border-bottom: 2px solid #15375b !important;
+    outline: 0 !important;
+    color: #ffffff !important;
+    padding: 7px 0 !important;
+    transition: border-color 0.2s !important;
+    background-color: transparent !important;
+}
+input:focus {
+    padding-bottom: 6px !important;
+    border-width: 3px !important;
+    border-image: linear-gradient(to right, #15375b,#1269b3) !important;
+    border-image-slice: 1 !important;
+}
+select {
+    min-width: 100px !important;
+    border: 0 !important;
+    border-bottom: 2px solid #15375b !important;
+    outline: 0 !important;
+    color: #15375b !important;
+    padding: 7px 0 !important;
+    transition: border-color 0.2s !important;
+}
+textarea {
+    border: 0 !important;
+    border-bottom: 2px solid #15375b !important;
+    outline: 0 !important;
+    color: #15375b !important;
+    padding: 7px 0 !important;
+    transition: border-color 0.2s !important;
+}
+textarea:focus {
+    padding-bottom: 6px;
+    border-width: 3px;
+    border-image: linear-gradient(to right, #15375b,#1269b3);
+    border-image-slice: 1;
+}

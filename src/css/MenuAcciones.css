@@ -32,3 +32,15 @@
     height: 20px;
     width: 20px;
 }
+.popupMarker {
+    text-align: center !important;
+}
+
+.iconBuscar {
+    background-color: transparent !important;
+    border: 2px solid #15375b !important;
+    border-top: 0 !important;
+    border-right: 0 !important;
+    border-left: 0 !important;
+    color: white !important;
+}

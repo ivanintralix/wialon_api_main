@@ -5,4 +5,6 @@ export const LOGOUT = 'LOGOUT';
 
 export const SAVE_USER = 'SAVE_USER';
 
-export const SAVE_DEVICES = 'SAVE_DEVICES';
+export const START_GET_GROUPS = 'START_GET_GROUPS';
+export const GET_GROUPS_EXITO = 'GET_GROUPS_EXITO';
+export const GET_GROUPS_ERROR = 'GET_GROUPS_ERROR';

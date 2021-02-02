@@ -6,23 +6,20 @@ import wialon from "../wialon/session";
 
 import AuthService from "../services/AuthService";
 import { saveTokenAction, startSaveTokenAction, saveUserAction } from "../store/actions/usuarioActions";
+import { getGroupsAction } from "../store/actions/gruposActions";
 
 const PrivateRoute = ({ component: Component}) => {
-  
+
   const dispatch = useDispatch();
-  
+
   const wialonLogin = (token) => {
-    console.log(token);
     const wialonObjeto = new wialon(token);
     let iniciar = new Promise((resolve, reject) => {
     wialonObjeto.login( function(data) {
-        console.log(data);
         if (data.error) {
             reject("¡Error");
-            //callback(data);
         } else {
             resolve("¡Éxito!");
-            //callback(data);
         }
       });
     });
@@ -31,25 +28,26 @@ const PrivateRoute = ({ component: Component}) => {
         saveUserAction()
         console.log(wialonObjeto);
         dispatch(saveUserAction(wialonObjeto))
+        dispatch(getGroupsAction())
         setLoading(true);
     });
   }
+
   const [loading, setLoading] = useState(false);
+  const loadingGrupos = useSelector(state => state.grupos.loading)
   const [token, setTOken ] = useState( () => {
     const token2 = AuthService.getToken();
     dispatch(saveTokenAction(token2));
     wialonLogin(token2);
-    
+
     return token2;
   });
-  
-  //wialonLogin(token);
+
   return (
-    
     <Route render={
         (props) => (
           token !== null ? 
-            loading ?
+            loading && !loadingGrupos ?
               <Component {...props} />
               :
               <p>hola</p>
@@ -59,7 +57,5 @@ const PrivateRoute = ({ component: Component}) => {
 
   )
 }
-
-
 export default PrivateRoute;
 //export default connect(mapStateToProps)(PrivateRoute)
