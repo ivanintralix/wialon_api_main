@@ -1,20 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import {connect} from 'react-redux';
-import {Link, withRouter, Redirect} from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Redirect } from 'react-router-dom';
 import MenuLateral from "../pages/Menu";
-import AuthService from "../services/AuthService";
-import { useDispatch, useSelector } from "react-redux";
-import { saveTokenAction } from "../store/actions/usuarioActions";
+import { useSelector } from "react-redux";
 
 const DesktopContainer = ({children}) => {
-  const [token, setToken] = useState(useSelector(state => state.usuario.token))
-  
-  const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-  },[])
-  
+  const token = useSelector(state => state.usuario.token);
   return (
     <div>
       {

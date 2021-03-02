@@ -80,3 +80,7 @@ body, html, .App, #root, .outer {
   /* margin-right: -80px; */
   margin-left: 80px  !important;
 }
+
+.containerReglas{
+  margin-left: 0px !important;
+}

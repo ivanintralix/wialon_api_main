@@ -1,24 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ProSidebar, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
 import { FaLock, FaArrowAltCircleDown, FaSearch } from 'react-icons/fa';
 import { Accordion, Card, Button, InputGroup, FormControl } from 'react-bootstrap';
 import 'react-pro-sidebar/dist/css/styles.css';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import Swal from 'sweetalert2';
 
 const MenuAcciones = ({grupos, positionCurrentMarket}) => {
+  grupos = grupos.filter(grupo => grupo.d.u.length > 0);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+
+  let unidades = useSelector(state => state.unidades.unidades);
   const [gruposModal, setGruposModal] = useState(grupos);
-  //console.log(unidades)
+  const wialonObject = useSelector(state => state.usuario.user);
+
   const buscarUnidad = e => {
     e.preventDefault();
+    const nombre = e.target.value.toUpperCase();
     const arrayGrupos = [];
     let tempGrupos = grupos;
-    tempGrupos = tempGrupos.filter(grupo =>(grupo.unidades.filter(unidad => unidad.toString().search(e.target.value) !== -1)).length > 0);
-    tempGrupos.map(grupo => {
-      const grupoT = grupo;
-      const unidadesT = grupoT.unidades.filter(unidad => unidad.toString().search(e.target.value) !== -1 );
-      arrayGrupos.push({id:grupoT.id,nombre:grupoT.nombre,unidades:unidadesT});
-    })
-    //console.log(arrayGrupos);
+    tempGrupos.forEach(grupo => {
+      const arrayunidades = [];
+      grupo.d.u.forEach(unidadGrupo => {
+        unidades.forEach(unidad => {
+          if (unidadGrupo === unidad.id) {
+            if(unidad.nm.toUpperCase().search(nombre) !== -1){
+              arrayunidades.push(unidadGrupo);
+            }
+          }
+        });
+      });
+      arrayGrupos.push({
+        f: grupo.f,
+        i: grupo.i,
+        d:{
+          cls: grupo.d.cls,
+          id:grupo.d.id,
+          mu: grupo.d.mu,
+          nm: grupo.d.nm,
+          u:arrayunidades
+        }
+      });
+    });
     setGruposModal(arrayGrupos);
   }
   const addDevice = e => {
@@ -29,20 +62,85 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
     //agregar unidades
   }
   const addAllDevices = (e,grupo) => {
-    grupo.unidades.map(unidad => {
+    console.log(grupo);
+    grupo.d.u.map(unidad => {
       var total=document.getElementsByName(unidad + "checkbox").length;
       for(var i=0;i<total;i++){
         document.getElementsByName(unidad + "checkbox")[i].checked = e.target.checked;
       }
     })
   }
+
+  const cmdAlert = (e,comandoString) => {
+    e.preventDefault();
+    console.log(comandoString);
+    const arrayU = [];
+    const arrayUID = [];
+    let stringU = "";
+    unidades.forEach(unidad => {
+      const chek = document.getElementById(unidad.id+"checkbox").checked;
+      console.log(chek)
+      if (chek) {
+        arrayUID.push(unidad.id);
+        arrayU.push(unidad.nm);
+        stringU +=unidad.nm+"<br/>"
+      }
+    });
+    console.log(arrayU);
+    if (arrayU.length > 0) {
+      Swal.fire({
+        title: `Quieres enviar el comando ${comandoString}?`,
+        html: `${stringU}`,
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonColor: '#cc3300',
+        focusConfirm: false,
+        confirmButtonText: `Enviar`,
+      }).then((result) => {
+        console.log(result)
+        if (result.value) {
+          //Swal.fire('Comando enviado!', '', 'success')
+          Swal.fire('Enviando comando', '', '')
+          cmd(arrayUID,comandoString);
+          Swal.showLoading();
+        } else if (result.dismiss) {
+          Swal.fire(`No se envio el comando ${comandoString}`, '', 'info')
+        }
+      })
+    }else{
+      Toast.fire({
+        type: 'warning',
+        title: 'Seleccione al menos una unidad'
+      })
+    }
+    
+  }
+  const cmd = (arrayUID,comandoString) => {
+    wialonObject.enviarComando(arrayUID,comandoString,function(data,arrayError) {
+      console.log(data);
+      if (data.error) {
+        Swal.fire('No se envio el comando', '', 'warning')
+      } else {
+        if (arrayError.length) {
+          let unidadesError = "";
+          arrayError.forEach(unidad => {
+            unidadesError +=unidad+"<br/>"
+          });
+          Swal.fire('No se envio el comando a las unidades', unidadesError, 'warning')
+        } else {
+          Swal.fire('Comando enviado', '', 'success')
+        }
+      }
+    });
+  }
   return (
+      <>
       <ProSidebar className='sidebaracciones' >
         <SidebarHeader>
           <div className='sidebarMNHeader' >
-            <Button variant="outline-success">Abrir</Button>{' '}
-            <Button variant="outline-primary">Restablecer</Button>{' '}
-            <Button variant="outline-warning">Cerrar</Button>{' '}
+            <Button variant="outline-success" onClick={ e => cmdAlert(e,"Posición") } >Abrir</Button>{' '}
+            <Button variant="outline-primary" onClick={ e => cmdAlert(e,"Posición") } >Restablecer</Button>{' '}
+            <Button variant="outline-warning" onClick={ e => cmdAlert(e,"Posición") } >Cerrar</Button>{' '}
             <br></br><br></br>
             <InputGroup onChange={ buscarUnidad } size="sm" className="mb-3">
               <InputGroup.Prepend>
@@ -56,30 +154,35 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
           {/**Acordeon que me acumula todo un grupo */}
           {
             gruposModal.map(grupo => (
-              <Accordion key={grupo.id + "G"} defaultActiveKey="0">
-                <Card>
-                    <Card.Header >
-                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                            <FaArrowAltCircleDown />{grupo.nombre}
-                        </Accordion.Toggle>
-                        <input className="checbokGroup" type="checkbox" id={grupo.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
-                    </Card.Header>
-                    <Accordion.Collapse eventKey="0">
-                        {/**Todas las unidades del grupo */}
-                        <Card.Body style={{padding: "10px 10px 10px 20px", color: "#000000"}}>
-                          {
-                            grupo.unidades.map(unidad => (
-                              <span key={unidad + "MA"} style={{cursor: "pointer"}} onClick={ () => positionCurrentMarket(unidad)}>
-                                <span><FaLock size={20} /> Unidad: {unidad}</span>
-                                <input className="checbokUnidad" type="checkbox" id={unidad + "checkbox"} name={unidad + "checkbox"} onChange={ e => addDevice(e) } />
-                                <br></br>
-                              </span>
-                            ))
-                          }
-                        </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
-              </Accordion>
+                grupo.d.u.length > 0 ? 
+                  (
+                    <Accordion key={grupo.d.id + "G"} defaultActiveKey="0">
+                      <Card>
+                          <Card.Header >
+                              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                                  <FaArrowAltCircleDown />{grupo.d.nm}
+                              </Accordion.Toggle>
+                              <input className="checbokGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
+                          </Card.Header>
+                          <Accordion.Collapse eventKey="1">
+                              {/**Todas las unidades del grupo */}
+                              <Card.Body style={{padding: "10px 10px 10px 20px", color: "#000000"}}>
+                                {
+                                  grupo.d.u.map(unidad => (
+                                    <span key={unidad + "MA"} style={{cursor: "pointer"}} onClick={ () => positionCurrentMarket(unidad)}>
+                                      <span><FaLock size={20} /> Unidad: {  (unidades.filter(unidad2 => unidad === unidad2.id))[0].nm  }</span>
+                                      <input className="checbokUnidad" type="checkbox" id={unidad + "checkbox"} name={unidad + "checkbox"} onChange={ e => addDevice(e) } />
+                                      <br></br>
+                                    </span>
+                                  ))
+                                }
+                              </Card.Body>
+                          </Accordion.Collapse>
+                      </Card>
+                    </Accordion>
+                  )
+                  :
+                    null
             ))
           }
         </SidebarContent>
@@ -92,6 +195,8 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
           </div>
         </SidebarFooter>
       </ProSidebar>
+     
+      </>
     );
 }
  

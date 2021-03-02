@@ -1,9 +1,9 @@
 import { 
     SAVE_TOKEN,
-    GET_TOKEN,
     LOGOUT,
     START_SAVE_TOKEN,
     SAVE_USER,
+    LOGOUT_USUARIO
 } from '../types';
 
 export function startSaveTokenAction() {
@@ -36,6 +36,14 @@ export function saveUserAction(user) {
         dispatch({
             type : SAVE_USER,
             payload : user
+        });
+    }
+}
+
+export function logoutUsuarioAction() {
+    return (dispatch) => {
+        dispatch({
+            type : LOGOUT_USUARIO
         });
     }
 }

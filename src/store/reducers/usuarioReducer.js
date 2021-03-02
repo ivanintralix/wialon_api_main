@@ -1,9 +1,9 @@
 import { 
     SAVE_TOKEN,
-    GET_TOKEN,
     LOGOUT,
     START_SAVE_TOKEN,
-    SAVE_USER
+    SAVE_USER,
+    LOGOUT_USUARIO
  } from '../types';
 
 const initialState = {
@@ -37,6 +37,8 @@ export default function usuarioReducer(state = initialState, action) {
                 user : action.payload,
                 loading: false
             }
+        case LOGOUT_USUARIO:
+            return state=initialState
         default:
             return state;
     }

@@ -2,8 +2,6 @@
 /**
  * Auth Service
  */
-import axios from 'axios';
-
 
 const AuthService = {
   login: function(email, password) {
@@ -22,6 +20,7 @@ const AuthService = {
    */
   logout: function () {
     localStorage.removeItem('token');
+    localStorage.removeItem('sid');
   },
   getToken: function() {
     return localStorage.getItem('token');

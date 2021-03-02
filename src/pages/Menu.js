@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AuthService from "../services/AuthService";
-import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
+import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { FaCog, FaLock, FaWrench, FaSignOutAlt } from 'react-icons/fa';
-import { useDispatch, useSelector } from "react-redux";
-import { logoutAction } from "../store/actions/usuarioActions";
+import { useDispatch } from "react-redux";
+
+import { logoutUsuarioAction } from "../store/actions/usuarioActions";
+import { logoutUnidadesAction } from "../store/actions/unidadesActions";
+import { logoutTareasAction } from "../store/actions/tareasActions";
+import { logoutGruposAction } from "../store/actions/gruposActions";
+import { logoutCMDSAction } from "../store/actions/CMDSActions";
+
 import { useHistory } from "react-router-dom";
 
 import { Link } from "react-router-dom";
@@ -25,7 +31,11 @@ const MenuLateral = () => {
 
   const logOut = () => {
     AuthService.logout();
-    dispatch( logoutAction() );
+    dispatch( logoutUsuarioAction() );
+    dispatch( logoutUnidadesAction() );
+    dispatch( logoutTareasAction() );
+    dispatch( logoutGruposAction() );
+    dispatch( logoutCMDSAction() );
     history.push('/login');
   }
   return (
@@ -62,14 +72,13 @@ const MenuLateral = () => {
             <Link to={'/Equipos'} className="text-light">Equipos</Link>
           </MenuItem>
           <MenuItem icon={<FaCog />}>
-            Programción
+            <Link to={'/Reglas'} className="text-light">Reglas</Link>
           </MenuItem>
         </Menu>
       </SidebarContent>
       <SidebarFooter>
           <Menu iconShape="circle">
             <MenuItem onClick={() => logOut()} icon={<FaSignOutAlt />}>Salir</MenuItem>
-            <MenuItem icon={<FaCog />}>Editar usuario</MenuItem>
           </Menu>
       </SidebarFooter>
     </ProSidebar>

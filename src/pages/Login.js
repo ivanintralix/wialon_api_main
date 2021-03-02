@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import AuthService from "../services/AuthService";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { saveTokenAction } from "../store/actions/usuarioActions";
 
 
@@ -10,8 +10,6 @@ const Login = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const token = useSelector(state => state.usuario.token);
-  console.log(token);
 
   useEffect(() => {
     const token = AuthService.getToken();
@@ -23,18 +21,19 @@ const Login = () => {
 
   window.onmessage = function (e) {
     var msg = e.data;
-    if (typeof msg == "string" && msg.indexOf("access_token=") >= 0) {
-      var token = msg.replace("access_token=", "");
+    if (typeof msg == "string" && msg.indexOf("access_hash=") >= 0) {
+      var token = msg.replace("access_hash=", "");
       AuthService.saveToken(token);
       dispatch( saveTokenAction(token) );
       history.push('/');
     }
+    //acces_type:256
   };
   return (
     <div>
         <iframe
         id="iframeInicio"
-        src="https://hosting.wialon.com/login.html?client_id=myApp&access_type=0x100&activation_time=0&duration=604800&flags=0x1&redirect_uri=https://hosting.wialon.com/post_token.html"
+        src="http://gps.intralix.com/login.html?client_id=myApp&access_type=0xFFFFFFFF&activation_time=0&duration=604800&flags=0xFFFFFFFF&response_type=hash&redirect_uri=http://gps.intralix.com/post_token.html"
         title="Inline Frame Example"
         width="500"
         height="500"

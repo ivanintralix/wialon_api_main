@@ -19,6 +19,11 @@ p, label {
 h1, h2, h3, h4, h5, h6 {
     font-family: "Helvetica Neue" !important;
 }
+.inputBlack{
+    color:black !important;
+    inline-size: inherit;
+}
+
 input {
     border: 0 !important;
     border-bottom: 2px solid #15375b !important;
@@ -57,3 +62,16 @@ textarea:focus {
     border-image: linear-gradient(to right, #15375b,#1269b3);
     border-image-slice: 1;
 }
+.popoverPanale{
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+    transition: opacity .3s ease;
+    max-width: 100% !important;
+    text-align: -webkit-center;
+  }
