@@ -123,7 +123,7 @@ const Equipos = () => {
                     arrayUnidades.push({
                         id: unidad.id,
                         nm: unidad.nm
-                      });
+                    });
                 }
             }
         );

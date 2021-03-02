@@ -14,10 +14,10 @@ import { getCMDSUnitsAction } from "../store/actions/CMDSActions";
 import preloader from "../img/preloader.svg";
 
 const PrivateRoute = ({ component: Component}) => {
-  
+
   const history = useHistory();
   const dispatch = useDispatch();
-  
+
   let wialonObjeto = null;
   const wialonLogin = (token) => {
     wialonObjeto = new wialon(token);
@@ -49,6 +49,7 @@ const PrivateRoute = ({ component: Component}) => {
   const loadingGrupos = useSelector(state => state.grupos.loading)
   const loadingUnidades = useSelector(state => state.unidades.loading);
   const loadingJobs = useSelector(state => state.tareas.loading);
+  const loadingCMDS = useSelector(state => state.CMDS.loading);
 
   const [token] = useState( () => {
     const token2 = AuthService.getToken();
@@ -62,7 +63,7 @@ const PrivateRoute = ({ component: Component}) => {
     <Route render={
         (props) => (
           token !== null ? 
-            loading && !loadingGrupos && !loadingUnidades && !loadingJobs ?
+            loading && !loadingGrupos && !loadingUnidades && !loadingJobs && !loadingCMDS ?
               <Component {...props} />
               :
               <img src={preloader} />

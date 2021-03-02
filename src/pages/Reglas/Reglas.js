@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Accordion, Card, Button, Container, Row, Col } from 'react-bootstrap';
 import { FaLock, FaSearch, FaArrowAltCircleDown, FaTasks } from 'react-icons/fa';
 import { useSelector } from "react-redux";
@@ -11,65 +11,122 @@ import EditarRegla from "./EditarRegla";
 import Main from '../Main';
 
 const Reglas = () => {
-    
+
     const usuario =  useSelector(state => state.usuario);
     let unidades = useSelector(state => state.unidades.unidades);
+    const CMDSUnidades = useSelector(state => state.CMDS.unidadesCMDS)
     let grupos = useSelector(state => state.grupos.grupos);
-    grupos = grupos.filter(grupo => grupo.d.u.length > 0);
+    const gruposFiltrados = grupos => {
+        const newGR = grupos.map( grupo => {
+            let nuevasUnidades = grupo.d.u.map(Uni => {
+                const unidadCcmd = CMDSUnidades.find(unidad => Uni === unidad.id);
+                if (unidadCcmd !== undefined) {
+                    return Uni;
+                }
+            });
+            nuevasUnidades = nuevasUnidades.filter( uni => uni !== undefined);
+            //console.log(nuevasUnidades);
+            if (nuevasUnidades.length > 0) {
+                grupo.d.u = nuevasUnidades;
+                return grupo;
+            }
+        });
+        //console.log(newGR);
+        const gruposFiltrados = newGR.filter(grupo => grupo !== undefined)
+        return gruposFiltrados;
+    };
+    grupos = gruposFiltrados(grupos);
+    console.log(grupos);
     const [gruposModal, setGruposModal] = useState(grupos);
     const [nuevaRegla, setNuevaRegla] = useState(false);
     const jobs = useSelector(state => state.tareas.tareas)
-    const [jobsModal, setJobsModal] = useState([]); 
+    const [jobsModal, setJobsModal] = useState([]);
     const [verUnidades, setVerunidades] = useState(false);
     //const [unidadesJob, setUnidadesJob] = useState([]);
     const [jobId,setJobId] = useState(0);
     const [editarRegla, setEditarRegla] = useState(false);
-    
+    const [comandoNuevaRegla, setComandoNuevaRegla] = useState("Posición");
+
+    const [unidadesCheck,setUnidadesCheck] = useState([]);
+    console.log(unidadesCheck);
+    useEffect(() => {
+        console.log(comandoNuevaRegla);
+        //var div = document.getElementById("div1");
+        //div.style.marginTop = ".25in";
+        if (comandoNuevaRegla !== null) {
+
+            CMDSUnidades.forEach(unidad => {
+                const validarCMD = unidad.cmds.filter(cmd => cmd.n === comandoNuevaRegla);
+                console.log(validarCMD);
+            });
+        }
+    }, [comandoNuevaRegla]);
     const buscarUnidad = e => {
         e.preventDefault();
         const nombre = e.target.value.toUpperCase();
         const arrayGrupos = [];
         let tempGrupos = grupos;
         tempGrupos.forEach(grupo => {
-          const arrayunidades = [];
-          grupo.d.u.forEach(unidadGrupo => {
-            unidades.forEach(unidad => {
-              if (unidadGrupo === unidad.id) {
-                if(unidad.nm.toUpperCase().search(nombre) !== -1){
-                  arrayunidades.push(unidadGrupo);
-                }
-              }
+            const arrayunidades = [];
+            grupo.d.u.forEach(unidadGrupo => {
+                unidades.forEach(unidad => {
+                    if (unidadGrupo === unidad.id) {
+                        if(unidad.nm.toUpperCase().search(nombre) !== -1){
+                            arrayunidades.push(unidadGrupo);
+                        }
+                    }
+                });
             });
-          });
-          arrayGrupos.push({
-            f: grupo.f,
-            i: grupo.i,
-            d:{
-              cls: grupo.d.cls,
-              id:grupo.d.id,
-              mu: grupo.d.mu,
-              nm: grupo.d.nm,
-              u:arrayunidades
-            }
-          });
+            arrayGrupos.push({
+                f: grupo.f,
+                i: grupo.i,
+                d:{
+                cls: grupo.d.cls,
+                id:grupo.d.id,
+                mu: grupo.d.mu,
+                nm: grupo.d.nm,
+                u:arrayunidades
+                }
+            });
         });
         setGruposModal(arrayGrupos);
     }
     const addDevice = e => {
-    var total=document.getElementsByName(e.target.id).length;
-    for(var i=0;i<total;i++){
-        document.getElementsByName(e.target.id)[i].checked = e.target.checked;
-    }
-    //agregar unidades
+        var total = document.getElementsByName(e.target.id).length;
+        for(var i=0;i<total;i++){
+            document.getElementsByName(e.target.id)[i].checked = e.target.checked;
+        }
+        const CCB = document.getElementById(e.target.id);
+        console.log(e.target.id);
+        console.log(e.target.id.replace("checkbox", ""))
+        const NUC = parseInt(e.target.id.replace("checkbox", ""));
+        if (CCB.checked) {
+            setUnidadesCheck([...unidadesCheck,NUC]);
+        }else{
+            setUnidadesCheck(unidadesCheck.filter( unidadCB => unidadCB !== NUC))
+        }
+        //agregar unidades
     }
     const addAllDevices = (e,grupo) => {
     console.log(grupo);
+    let arrayUnidadesCB = [];
     grupo.d.u.map(unidad => {
         var total=document.getElementsByName(unidad + "checkbox").length;
         for(var i=0;i<total;i++){
-        document.getElementsByName(unidad + "checkbox")[i].checked = e.target.checked;
+            document.getElementsByName(unidad + "checkbox")[i].checked = e.target.checked;
+        }
+        const VCB = unidadesCheck.filter(unidadCB => unidad === unidadCB );
+        if (VCB.length <= 0) {
+            arrayUnidadesCB.push(unidad);
         }
     })
+    if (e.target.checked) {
+        
+        arrayUnidadesCB = unidadesCheck.concat(arrayUnidadesCB);
+        setUnidadesCheck(arrayUnidadesCB);
+    }else{
+        //setUnidadesCheck(unidadesCheck.filter( unidadCB => unidadCB !== unidad));
+    }
     }
     const confirmNuevaRegla = e => {
         e.preventDefault();
@@ -85,9 +142,8 @@ const Reglas = () => {
                     arrayUID.push(unidad.id);
                     arrayU.push(unidad.nm);
                     stringU +=unidad.nm+"<br/>"
-                }    
+                }
             }
-            
         });*/
         setNuevaRegla(true);
     }
@@ -120,7 +176,7 @@ const Reglas = () => {
                 currentGroup[0].d.u.forEach(unidadesG => {
                     if (unidadJob === unidadesG) {
                         flag = true;
-                    } 
+                    }
                 });
             });
             if (flag) {
@@ -153,13 +209,13 @@ const Reglas = () => {
         setJobId(jobId);
         setEditarRegla(true);
     }
-    return ( 
+    return (
         <Main>
             <Container className="containerReglas">
                 <Row>
                     <Col xs lg="6">
                         {
-                            !verUnidades ?    
+                            !verUnidades ?
                                 <Card>
                                     <Card.Body style={{overflowY:"auto"}} >
                                         <Card.Title style={{ margin:"10px 0 10px 0", textAlign:"-webkit-right"}}>
@@ -172,7 +228,7 @@ const Reglas = () => {
                                         {
                                             gruposModal.length > 0 ?
                                                 gruposModal.map(grupo => (
-                                                    grupo.d.u.length > 0 ? 
+                                                    grupo.d.u.length > 0 ?
                                                     (
                                                         <Accordion key={grupo.d.id + "G"} defaultActiveKey="0">
                                                         <Card>
@@ -189,9 +245,9 @@ const Reglas = () => {
                                                                     {
                                                                         grupo.d.u.map(unidad => (
                                                                             <span key={unidad + "MA"} style={{cursor: "pointer"}} >
-                                                                            <span><FaLock size={20} /> Unidad: 
-                                                                            {  
-                                                                                (unidades.filter(unidad2 => unidad === unidad2.id))[0].nm 
+                                                                            <span><FaLock size={20} /> Unidad:
+                                                                            {
+                                                                                (unidades.filter(unidad2 => unidad === unidad2.id))[0].nm
                                                                             }</span>
                                                                             <FaTasks onClick={e => showJobsUnit(e,unidad)}></FaTasks>
                                                                             <input className="checbokUnidad" type="checkbox" id={unidad + "checkbox"} name={unidad + "checkbox"} onChange={ e => addDevice(e) } />
@@ -219,16 +275,17 @@ const Reglas = () => {
                     </Col>
                     <Col xs lg="6">
                     {
-                        nuevaRegla ? 
-                            <NuevaRegla 
+                        nuevaRegla ?
+                            <NuevaRegla
                                 setNuevaRegla={setNuevaRegla}
+                                setComandoNuevaRegla={setComandoNuevaRegla}
                             />
                         :
                             null
                     }
-                    {   
+                    {
                         jobsModal.length > 0 ?
-                            <Jobs 
+                            <Jobs
                                 unitsJobs={unitsJobs}
                                 jobsModal={jobsModal}
                                 editJob={editJob}
@@ -237,8 +294,8 @@ const Reglas = () => {
                             null
                     }
                     {
-                        verUnidades ? 
-                            <VerUnidades 
+                        verUnidades ?
+                            <VerUnidades
                                 setVerunidades={setVerunidades}
                                 jobId={jobId}
                             />
@@ -247,7 +304,7 @@ const Reglas = () => {
                     }
                     {
                         editarRegla ?
-                        <EditarRegla 
+                        <EditarRegla
                             jobId={jobId}
                             setEditarRegla={setEditarRegla}
                         />
@@ -257,9 +314,7 @@ const Reglas = () => {
                     </Col>
                 </Row>
             </Container>
-            
         </Main>
     );
 }
- 
 export default Reglas;

@@ -5,7 +5,10 @@ import {
     LOGOUT_TAREAS,
     START_UPDATE_UNITS_JOBS,
     UPDATE_UNITS_JOBS_EXITO,
-    UPDATE_UNITS_JOBS_ERROR
+    UPDATE_UNITS_JOBS_ERROR,
+    START_UPDATE_JOBS,
+    UPDATE_JOBS_EXITO,
+    UPDATE_JOBS_ERROR
 } from '../types';
 
 export function getJobsAction(wialonObjeto) {
@@ -70,6 +73,37 @@ const updateUnitsJobsExito = (jobs) => ({
 })
 const updateUnitsJobsError = () => ({
     type: UPDATE_UNITS_JOBS_ERROR
+})
+
+export function updateJobAction(id,nuevaTarea,wialonObjeto) {
+    return async (dispatch) => {
+        dispatch( startUpdateJobsAction() );
+        try {
+            new Promise(() => {
+                wialonObjeto.editJob( id,nuevaTarea,function(data) {
+                    console.log(data);
+                    if (data.error) {
+                        dispatch( updateJobsError() );
+                    } else {
+                        dispatch( updateJobsExito(data) );
+                    }
+                });
+            });
+        } catch (error) {
+            dispatch( updateJobsError() )
+            console.log(error);
+        }
+    }
+}
+const startUpdateJobsAction = () => ({
+    type: START_UPDATE_JOBS
+})
+const updateJobsExito = (jobs) => ({
+    type: UPDATE_JOBS_EXITO,
+    payload: jobs
+})
+const updateJobsError = () => ({
+    type: UPDATE_JOBS_ERROR
 })
 
 export function logoutTareasAction() {

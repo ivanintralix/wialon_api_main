@@ -30,9 +30,8 @@ export default class wialon {
                     //console.log('itemDeleted', arguments);
                 });
             const StorageSID = localStorage.getItem('sid');
-            
             if (!StorageSID) {
-                session.execute('core/use_auth_hash', {authHash: this.token}, function(data) {        
+                session.execute('core/use_auth_hash', {authHash: this.token}, function(data) {
                     var params = {
                         params:{"operateAs":"",continueCurrentSession:true,checkService:"auto.wialon_web.0",restore:1,appName:"myApp"},
                         sid:  session.getSid()
@@ -54,8 +53,7 @@ export default class wialon {
                                 resolve("¡Éxito!");
                                 callback(data);
                             }
-                        }); 
-                        
+                        });
                     });
                 });
             }else{
@@ -71,7 +69,6 @@ export default class wialon {
                     sid: self.sid
                 }
                 session.execute('core/duplicate', params, function(data) {
-                    
                     localStorage.setItem('sid', session.getSid());
                     self.sid = session.getSid();
                     self.usuario = data;
@@ -87,8 +84,7 @@ export default class wialon {
                             resolve("¡Éxito!");
                             callback(data);
                         }
-                    }); 
-                    
+                    });
                 });
             }
 
@@ -179,11 +175,9 @@ export default class wialon {
                 }
             });
         });
-        
     }
     editUnitsJob(id,unidades,callback){
         const self = this;
-        
         new Promise(()=>{
             //obtener la tarea
             var params = {
@@ -202,6 +196,74 @@ export default class wialon {
                     const creatorId = self.usuario.user.id
                     data.act.p.units = unidades;
                     Object.assign(data, {itemId: 105,callMode:"update"});
+                    var params = {
+                        params:data
+                    };
+                    self.session.execute('resource/update_job', params, function (data) {
+                        console.log(data);
+                        if (data.error) {
+                            callback(data);
+                        } else {
+                            var params = {
+                                params:{
+                                    "itemId":105,
+                                    "col":[7,8]
+                                }
+                            };
+                            self.session.execute('resource/get_job_data', params, function (data) {
+                                if (data.error) {
+                                    callback(data);
+                                } else {
+                                    const reglasArray = [];
+                                    data.forEach(tarea => {
+                                        const id = tarea.id;
+                                        const dias = obtenerDias(tarea.sch.w);
+                                        const nombre = tarea.n;
+                                        const comando = tarea.act.p.cmd_name;
+                                        const comandoTipo = tarea.act.p.cmd_type;
+                                        const unidades = obtenerUnidades(tarea.act.p.units);
+                                        const hora = obtenerHora(tarea.r);
+                                        const fecha = obtenerFecha(tarea.at);
+                                        const estado = tarea.st.e;
+                                        reglasArray.push({dias,nombre,comando,hora,unidades,estado,id,fecha,comandoTipo})
+                                    });
+                                    callback(reglasArray);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    };
+    editJob(id,nuevaTarea,callback){
+        const self = this;
+        new Promise(()=>{
+            //obtener la tarea
+            var params = {
+                params:{
+                    "itemId":105,
+                    "col":[id]
+                }
+            };
+            self.session.execute('resource/get_job_data', params, function (data) {
+                console.log(data);
+                if (data.error) {
+                    callback(data);
+                } else {
+                    //editar tarea
+                    data=data[0];
+                    const creatorId = self.usuario.user.id;
+                    //data.act.p.units = unidades;
+                    console.log(nuevaTarea);
+                    Object.assign(data, {itemId: 105,callMode:"update"});
+                    data.n = nuevaTarea.nombreTarea;
+                    data.r = "1 " + nuevaTarea.Hora;
+                    if (nuevaTarea.fecha !== null) data.at = nuevaTarea.fecha;
+                    if (nuevaTarea.arrayNuevosDias !== null) {
+                        const dias = formatoDiasTarea(nuevaTarea.arrayNuevosDias);
+                        data.sch.w = dias;
+                    }
                     var params = {
                         params:data
                     };
@@ -412,6 +474,17 @@ const obtenerDias = (diasJob) => {
         }
     });
     return arrayDias;
+}
+const formatoDiasTarea = (diasJob) => {
+    let contadorDias = 0;
+    diasJob.forEach(dia => {
+        arrayDiasJobs.forEach(DJ => {
+            if (dia === DJ[0]) {
+                contadorDias += DJ[1];
+            }
+        });
+    });
+    return contadorDias;
 }
 const arrayDiasJobs = [
     ["Domingo",64],

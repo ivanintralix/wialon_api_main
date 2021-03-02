@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Card, Container, Row, Col, Table, Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
+import { updateJobAction } from "../../store/actions/tareasActions";
 
 const EditarRegla = ({jobId,setEditarRegla}) => {
+    const dispatch = useDispatch();
     const jobs = useSelector(state => state.tareas.tareas);
     const job = jobs.filter(job => job.id === parseInt(jobId))[0];
-
     const [nombreTarea, setNombreRegla] = useState("")
     const [startDateHora, setStartDateHora] = useState(new Date());
     const [startDate, setStartDate] = useState(new Date());
     const [toggleDate, setToggleDate] = useState(true);
-    
+    const wialonObject = useSelector(state => state.usuario.user);
     useEffect(() => {
         if (job !== undefined && job !== null) {
             setNombreRegla(job.nombre);
@@ -57,27 +58,24 @@ const EditarRegla = ({jobId,setEditarRegla}) => {
             nuevaTarea.arrayNuevosDias=arrayNuevosDias;
         } else {
             //fecha exacta
-            console.log(startDate.getDate())
-            var day = startDate.getDate();
-            var month = startDate.getMonth();
-            var year = startDate.getFullYear();
-            const arrayMeses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-            const fecha  = day + " " + arrayMeses[month] + " " + year;
+            console.log(startDate)
+            const fecha  = startDate.getTime()/1000;
             console.log(fecha);
             nuevaTarea.fecha = fecha;
         }
-        console.log(nuevaTarea);        
+        console.log(nuevaTarea);
+        dispatch( updateJobAction(jobId,nuevaTarea,wialonObject) );
     }
     function addZero(i){
         if (i < 10) {
             i = "0" + i;
-          }
-          return i;
+        }
+        return i;
     }
-    return ( 
+    return (
         <>
             {
-                job !== undefined && job !== null ? 
+                job !== undefined && job !== null ?
                     <Container className="">
                         <Card >
                             <Card.Body>
@@ -142,10 +140,10 @@ const EditarRegla = ({jobId,setEditarRegla}) => {
                                         </tbody>
                                     </Table>
                                     :
-                                    <DatePicker 
+                                    <DatePicker
                                         className="inputBlack"
-                                        selected={startDate} 
-                                        onChange={date => setStartDate(date)} 
+                                        selected={startDate}
+                                        onChange={date => setStartDate(date)}
                                     />
                                 }
                                 <br></br><br></br><br></br>
@@ -160,5 +158,5 @@ const EditarRegla = ({jobId,setEditarRegla}) => {
         </>
     );
 }
- 
+
 export default EditarRegla;
