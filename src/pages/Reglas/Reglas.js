@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, Card, Button, Container, Row, Col } from 'react-bootstrap';
 import { FaLock, FaSearch, FaArrowAltCircleDown, FaTasks } from 'react-icons/fa';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 
 import NuevaRegla from "./NuevaRegla";
@@ -10,8 +10,12 @@ import VerUnidades from "./VerUnidades";
 import EditarRegla from "./EditarRegla";
 import Main from '../Main';
 
+import { CMDSDefault } from "../../config/CMDS";
+import { createJobAction } from "../../store/actions/tareasActions";
+
 const Reglas = () => {
 
+    const dispatch = useDispatch();
     const usuario =  useSelector(state => state.usuario);
     let unidades = useSelector(state => state.unidades.unidades);
     const CMDSUnidades = useSelector(state => state.CMDS.unidadesCMDS)
@@ -46,21 +50,62 @@ const Reglas = () => {
     const [jobId,setJobId] = useState(0);
     const [editarRegla, setEditarRegla] = useState(false);
     const [comandoNuevaRegla, setComandoNuevaRegla] = useState("Posición");
-
     const [unidadesCheck,setUnidadesCheck] = useState([]);
-    console.log(unidadesCheck);
-    useEffect(() => {
-        console.log(comandoNuevaRegla);
-        //var div = document.getElementById("div1");
-        //div.style.marginTop = ".25in";
-        if (comandoNuevaRegla !== null) {
+    const wialonObject = useSelector(state => state.usuario.user);
 
-            CMDSUnidades.forEach(unidad => {
-                const validarCMD = unidad.cmds.filter(cmd => cmd.n === comandoNuevaRegla);
-                console.log(validarCMD);
+    useEffect(() => {
+    }, []);
+    const addUnitNewJob = (tarea) => {
+        console.log(tarea);
+        tarea.unidades = unidadesCheck;
+        const CurrentCMD = CMDSDefault.find(cmd => cmd.cmd_name === tarea.cmd);
+        tarea.cmd = CurrentCMD;
+        //wialonObject.createNewJob(tarea);
+        dispatch(createJobAction(tarea,wialonObject));
+    }
+    const filtrarUnidadesComando = (e,comando) => {
+        const CurrentCMD = CMDSDefault.find(cmd => cmd.cmd_name === comando);
+        console.log(CurrentCMD)
+        grupos.forEach(grupo => {
+            grupo.d.u.forEach(unidad => {
+                var total = document.getElementsByName(unidad + "SpanGrupoTareas").length;
+                for(var i=0;i<total;i++){
+                    const domElement = document.getElementsByName(unidad + "SpanGrupoTareas")[i];
+                    domElement.style.color = "black";
+                }
+                var total = document.getElementsByName(unidad + "checkbox").length;
+                for(var i=0;i<total;i++){
+                    document.getElementsByName(unidad + "checkbox")[i].disabled = false;
+                }
             });
-        }
-    }, [comandoNuevaRegla]);
+        });
+
+        let arrayUnidadesCBF = unidadesCheck;
+        grupos.forEach(grupo => {
+            grupo.d.u.forEach(unidad => {
+                const foundUnidadCMDS = CMDSUnidades.find(cmdsunidad => cmdsunidad.id === unidad);
+                if (foundUnidadCMDS) {
+                    console.log(foundUnidadCMDS);
+                    const found = foundUnidadCMDS.cmds.find(cmd => cmd.n === CurrentCMD.cmd_name && CurrentCMD.cmd_type === cmd.c);
+                    if (!found) {
+                        arrayUnidadesCBF = arrayUnidadesCBF.filter( unidadCB => unidadCB !== foundUnidadCMDS.id)
+                        var total = document.getElementsByName(unidad + "SpanGrupoTareas").length;
+                        for(var i=0;i<total;i++){
+                            const domElement = document.getElementsByName(unidad + "SpanGrupoTareas")[i];
+                            domElement.style.color = "red";
+                        }
+                        var total = document.getElementsByName(unidad + "checkbox").length;
+                        for(var i=0;i<total;i++){
+                            document.getElementsByName(unidad + "checkbox")[i].checked = false;
+                            document.getElementsByName(unidad + "checkbox")[i].disabled = true;
+                        }
+                    }
+                }
+            });
+        });
+        setUnidadesCheck(arrayUnidadesCBF);
+        setComandoNuevaRegla(CurrentCMD);
+    }
     const buscarUnidad = e => {
         e.preventDefault();
         const nombre = e.target.value.toUpperCase();
@@ -108,43 +153,38 @@ const Reglas = () => {
         //agregar unidades
     }
     const addAllDevices = (e,grupo) => {
-    console.log(grupo);
-    let arrayUnidadesCB = [];
-    grupo.d.u.map(unidad => {
-        var total=document.getElementsByName(unidad + "checkbox").length;
-        for(var i=0;i<total;i++){
-            document.getElementsByName(unidad + "checkbox")[i].checked = e.target.checked;
+        console.log(grupo);
+        let arrayUnidadesCB = [];
+        grupo.d.u.map(unidad => {
+            var total=document.getElementsByName(unidad + "checkbox").length;
+            for(var i=0;i<total;i++){
+                if(!document.getElementsByName(unidad + "checkbox")[i].disabled){
+                    document.getElementsByName(unidad + "checkbox")[i].checked = e.target.checked;
+                }
+            }
+            const VCB = unidadesCheck.filter(unidadCB => unidad === unidadCB );
+            if (VCB.length <= 0) {
+                if(!document.getElementsByName(unidad + "checkbox")[0].disabled){
+                    arrayUnidadesCB.push(unidad);
+                }
+            }
+        })
+        if (e.target.checked) {
+            arrayUnidadesCB = unidadesCheck.concat(arrayUnidadesCB);
+            setUnidadesCheck(arrayUnidadesCB);
+        }else{
+            arrayUnidadesCB = unidadesCheck;
+            grupo.d.u.forEach(unidad => {
+                arrayUnidadesCB = arrayUnidadesCB.filter( unidadCB => unidadCB !== unidad)
+            });
+            console.log(arrayUnidadesCB);
+            setUnidadesCheck(arrayUnidadesCB);
         }
-        const VCB = unidadesCheck.filter(unidadCB => unidad === unidadCB );
-        if (VCB.length <= 0) {
-            arrayUnidadesCB.push(unidad);
-        }
-    })
-    if (e.target.checked) {
-        
-        arrayUnidadesCB = unidadesCheck.concat(arrayUnidadesCB);
-        setUnidadesCheck(arrayUnidadesCB);
-    }else{
-        //setUnidadesCheck(unidadesCheck.filter( unidadCB => unidadCB !== unidad));
-    }
     }
     const confirmNuevaRegla = e => {
         e.preventDefault();
-        /*
-        const arrayU = [];
-        const arrayUID = [];
-        let stringU = "";
-        unidades.forEach(unidad => {
-            const chek = document.getElementById(unidad.id+"checkbox");
-            if (chek !== null) {
-                //console.log(chek.checked)
-                if (chek.checked) {
-                    arrayUID.push(unidad.id);
-                    arrayU.push(unidad.nm);
-                    stringU +=unidad.nm+"<br/>"
-                }
-            }
-        });*/
+        setJobsModal([]);
+        filtrarUnidadesComando(null,"Posición");
         setNuevaRegla(true);
     }
     const showJobsUnit = (e,unidad) => {
@@ -245,10 +285,11 @@ const Reglas = () => {
                                                                     {
                                                                         grupo.d.u.map(unidad => (
                                                                             <span key={unidad + "MA"} style={{cursor: "pointer"}} >
-                                                                            <span><FaLock size={20} /> Unidad:
-                                                                            {
-                                                                                (unidades.filter(unidad2 => unidad === unidad2.id))[0].nm
-                                                                            }</span>
+                                                                            <span name={unidad+"SpanGrupoTareas"} ><FaLock size={20} /> Unidad:
+                                                                                {
+                                                                                    (unidades.filter(unidad2 => unidad === unidad2.id))[0].nm
+                                                                                }
+                                                                            </span>
                                                                             <FaTasks onClick={e => showJobsUnit(e,unidad)}></FaTasks>
                                                                             <input className="checbokUnidad" type="checkbox" id={unidad + "checkbox"} name={unidad + "checkbox"} onChange={ e => addDevice(e) } />
                                                                             <br></br>
@@ -278,7 +319,8 @@ const Reglas = () => {
                         nuevaRegla ?
                             <NuevaRegla
                                 setNuevaRegla={setNuevaRegla}
-                                setComandoNuevaRegla={setComandoNuevaRegla}
+                                filtrarUnidadesComando={filtrarUnidadesComando}
+                                addUnitNewJob={addUnitNewJob}
                             />
                         :
                             null

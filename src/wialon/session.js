@@ -150,8 +150,7 @@ export default class wialon {
         new Promise(() => {
             var params = {
                 params:{
-                    "itemId":105,
-                    "col":[7,8]
+                    "itemId":105
                 }
             };
             self.session.execute('resource/get_job_data', params, function (data) {
@@ -159,6 +158,7 @@ export default class wialon {
                     callback(data);
                 } else {
                     const reglasArray = [];
+                    data = data.filter( job => job.act.t === "exec_unit_cmd" )
                     data.forEach(tarea => {
                         const id = tarea.id;
                         const dias = obtenerDias(tarea.sch.w);
@@ -274,14 +274,14 @@ export default class wialon {
                         } else {
                             var params = {
                                 params:{
-                                    "itemId":105,
-                                    "col":[7,8]
+                                    "itemId":105
                                 }
                             };
                             self.session.execute('resource/get_job_data', params, function (data) {
                                 if (data.error) {
                                     callback(data);
                                 } else {
+                                    data = data.filter( job => job.act.t === "exec_unit_cmd" )
                                     const reglasArray = [];
                                     data.forEach(tarea => {
                                         const id = tarea.id;
@@ -302,6 +302,47 @@ export default class wialon {
                     });
                 }
             });
+        });
+    }
+    createNewJob(nuevaTarea,callback){
+        const self = this;
+        var data = armarTarea(nuevaTarea);
+        console.log(data)
+        var params = {
+            params:data
+        };
+        self.session.execute('resource/update_job', params, function (data) {
+            console.log(data);
+            if (data.error) {
+                callback(data);
+            } else {
+                var params = {
+                    params:{
+                        "itemId":105
+                    }
+                };
+                self.session.execute('resource/get_job_data', params, function (data) {
+                    if (data.error) {
+                        callback(data);
+                    } else {
+                        data = data.filter( job => job.act.t === "exec_unit_cmd" )
+                        const reglasArray = [];
+                        data.forEach(tarea => {
+                            const id = tarea.id;
+                            const dias = obtenerDias(tarea.sch.w);
+                            const nombre = tarea.n;
+                            const comando = tarea.act.p.cmd_name;
+                            const comandoTipo = tarea.act.p.cmd_type;
+                            const unidades = obtenerUnidades(tarea.act.p.units);
+                            const hora = obtenerHora(tarea.r);
+                            const fecha = obtenerFecha(tarea.at);
+                            const estado = tarea.st.e;
+                            reglasArray.push({dias,nombre,comando,hora,unidades,estado,id,fecha,comandoTipo})
+                        });
+                        callback(reglasArray);
+                    }
+                });
+            }
         });
     }
     showGroups(callback){
@@ -441,7 +482,50 @@ export default class wialon {
         });
     }
 }
-
+const armarTarea = (tarea) => {
+    let dias = 0;
+    if (tarea.arrayNuevosDias.length > 0) {
+        dias = formatoDiasTarea(tarea.arrayNuevosDias);
+    }
+    var local = new Date();
+    var utc = Date.UTC(local.getFullYear(), local.getMonth(), local.getDate(), local.getHours(), local.getMinutes(), local.getSeconds(), local.getMilliseconds());
+    var tz = (utc - local.getTime());
+    //console.log(utc - local.getTime());
+    const tareaNueva = {
+        "n": tarea.nombreTarea,
+        "d": tarea.nombreTarea + " creada desde portal de chapas",
+        "r": "1 "+tarea.Hora,
+        "at": tarea.fecha,
+        "tz": tz,       //verificar
+        "l": "es",
+        "e": 1,
+        "m": 0,
+        "sch": {
+            "f1": 0,
+            "f2": 0,
+            "t1": 0,
+            "t2": 0,
+            "m": 0,
+            "y": 0,
+            "w": dias          //dias a la semana que se repite
+        },
+        "act": {
+            "t": "exec_unit_cmd",
+            "p": {
+                "units": tarea.unidades.join(),
+                "cmd_name": tarea.cmd.cmd_name,
+                "cmd_type": tarea.cmd.cmd_type,
+                "cmd_param": tarea.cmd.cmd_param,
+                "link_type": "",
+                "timeout": 60
+            }
+        },
+        "id": 0,
+        "itemId": 105,
+        "callMode": "create"
+    }
+    return tareaNueva;
+}
 const obtenerFecha = (fecha) => {
     var a = new Date(fecha * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -495,6 +579,7 @@ const arrayDiasJobs = [
     ["Martes",2],
     ["Lunes",1]
 ]
+
 
 //Invoke-WebRequest -Uri "http://gps.intralix.com/wialon/ajax.html?svc=resource/update_job&sid=1f7b5888b31f65221c3ff2a37d9a6243" `
 //-Method "POST" `

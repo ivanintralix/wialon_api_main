@@ -1,0 +1,23 @@
+export const CMDSDefault = 
+[
+    {
+        cmd_name:"Abrir",
+        cmd_type:"query_pos",
+        cmd_param:""
+    },
+    {
+        cmd_name:"Cerrar",
+        cmd_type:"query_pos",
+        cmd_param:""
+    },
+    {
+        cmd_name:"Restablecer",
+        cmd_type:"query_pos",
+        cmd_param:""
+    },
+    {
+        cmd_name:"Posición",
+        cmd_type:"query_pos",
+        cmd_param:"AT+GTRTO=gv55w,1,,0,,,,FFFF$"
+    }
+];
