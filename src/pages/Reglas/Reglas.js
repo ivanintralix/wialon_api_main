@@ -11,11 +11,13 @@ import EditarRegla from "./EditarRegla";
 import Main from '../Main';
 
 import { CMDSDefault } from "../../config/CMDS";
-import { createJobAction } from "../../store/actions/tareasActions";
-
+import { createJobAction, deleteJobAction, activateJobsAction, deactivateJobsAction } from "../../store/actions/tareasActions";
+import preloader from "../../img/preloader.svg";
 const Reglas = () => {
 
     const dispatch = useDispatch();
+
+    const loading = useSelector(state => state.tareas.loadingData)
     const usuario =  useSelector(state => state.usuario);
     let unidades = useSelector(state => state.unidades.unidades);
     const CMDSUnidades = useSelector(state => state.CMDS.unidadesCMDS)
@@ -54,7 +56,13 @@ const Reglas = () => {
     const wialonObject = useSelector(state => state.usuario.user);
 
     useEffect(() => {
-    }, []);
+        jobsModal.forEach(jobModal => {
+            const found = jobs.find(job => job.id === jobModal.id );
+            if (!found) {
+                setJobsModal(jobsModal.filter(jobModal2 => jobModal.id !== jobModal2.id));
+            }
+        });
+    }, [jobs]);
     const addUnitNewJob = (tarea) => {
         console.log(tarea);
         tarea.unidades = unidadesCheck;
@@ -249,6 +257,21 @@ const Reglas = () => {
         setJobId(jobId);
         setEditarRegla(true);
     }
+    const deleteJob = (e,jobId) => {
+        e.preventDefault();
+        console.log(jobId);
+        dispatch( deleteJobAction(jobId,wialonObject) );
+    }
+    const activateJob = (e,jobId) => {
+        e.preventDefault();
+        console.log(jobId);
+        dispatch( activateJobsAction(jobId, wialonObject) )
+    }
+    const deactivateJob = (e,jobId) => {
+        e.preventDefault();
+        console.log(jobId);
+        dispatch( deactivateJobsAction(jobId, wialonObject) )
+    }
     return (
         <Main>
             <Container className="containerReglas">
@@ -314,7 +337,7 @@ const Reglas = () => {
                                 null
                         }
                     </Col>
-                    <Col xs lg="6">
+                    <Col xs lg="6" >
                     {
                         nuevaRegla ?
                             <NuevaRegla
@@ -331,6 +354,9 @@ const Reglas = () => {
                                 unitsJobs={unitsJobs}
                                 jobsModal={jobsModal}
                                 editJob={editJob}
+                                deleteJob={deleteJob}
+                                activateJob={activateJob}
+                                deactivateJob={deactivateJob}
                             />
                         :
                             null
@@ -352,6 +378,13 @@ const Reglas = () => {
                         />
                         :
                         null
+                    }
+                    {
+                        loading ?
+                        <Container className="popoverPanale">
+                            <img src={preloader} />
+                        </Container>
+                        :null
                     }
                     </Col>
                 </Row>

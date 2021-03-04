@@ -8,6 +8,28 @@ import Swal from 'sweetalert2';
 
 const MenuAcciones = ({grupos, positionCurrentMarket}) => {
   grupos = grupos.filter(grupo => grupo.d.u.length > 0);
+  const CMDSUnidades = useSelector(state => state.CMDS.unidadesCMDS);
+
+  const gruposFiltrados = grupos => {
+    const newGR = grupos.map( grupo => {
+        let nuevasUnidades = grupo.d.u.map(Uni => {
+            const unidadCcmd = CMDSUnidades.find(unidad => Uni === unidad.id);
+            if (unidadCcmd !== undefined) {
+                return Uni;
+            }
+        });
+        nuevasUnidades = nuevasUnidades.filter( uni => uni !== undefined);
+        //console.log(nuevasUnidades);
+        if (nuevasUnidades.length > 0) {
+            grupo.d.u = nuevasUnidades;
+            return grupo;
+        }
+    });
+    //console.log(newGR);
+    const gruposFiltrados = newGR.filter(grupo => grupo !== undefined)
+    return gruposFiltrados;
+  };
+  grupos = gruposFiltrados(grupos);
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -18,8 +40,7 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
       toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
-  })
-
+  });
   let unidades = useSelector(state => state.unidades.unidades);
   const [gruposModal, setGruposModal] = useState(grupos);
   const wialonObject = useSelector(state => state.usuario.user);

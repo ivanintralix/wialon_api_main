@@ -18,5 +18,4 @@ const MapaOSM = ({marketPosition}) => {
     </MapContainer>
   );
 }
- 
 export default MapaOSM;

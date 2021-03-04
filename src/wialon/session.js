@@ -118,13 +118,17 @@ export default class wialon {
             });
             self.session.execute('core/batch&sid=' + self.sid, params, function(data) {
                 console.log("cmds");
+                console.log(data);
                 if (data.error) {
                     callback(data);
                 } else {
                     const unidadesCMDS = [];
                     data.forEach(unidad => {
                         if (unidad.item.cmds !== undefined) {
+                            const fecha = ( unidad.item.pos !== null ? obtenerFecha(unidad.item.pos.t) : "00/00/0000");
                             unidadesCMDS.push({
+                                fecha:fecha,
+                                pos: unidad.item.pos,
                                 id:unidad.item.id,
                                 n:unidad.item.nm,
                                 cmds:unidad.item.cmds
@@ -145,6 +149,7 @@ export default class wialon {
             });
         })
     }
+    //
     getJobs(callback){
         const self = this;
         new Promise(() => {
@@ -306,45 +311,110 @@ export default class wialon {
     }
     createNewJob(nuevaTarea,callback){
         const self = this;
-        var data = armarTarea(nuevaTarea);
-        console.log(data)
-        var params = {
-            params:data
-        };
-        self.session.execute('resource/update_job', params, function (data) {
-            console.log(data);
-            if (data.error) {
-                callback(data);
-            } else {
-                var params = {
-                    params:{
-                        "itemId":105
-                    }
-                };
-                self.session.execute('resource/get_job_data', params, function (data) {
-                    if (data.error) {
-                        callback(data);
-                    } else {
-                        data = data.filter( job => job.act.t === "exec_unit_cmd" )
-                        const reglasArray = [];
-                        data.forEach(tarea => {
-                            const id = tarea.id;
-                            const dias = obtenerDias(tarea.sch.w);
-                            const nombre = tarea.n;
-                            const comando = tarea.act.p.cmd_name;
-                            const comandoTipo = tarea.act.p.cmd_type;
-                            const unidades = obtenerUnidades(tarea.act.p.units);
-                            const hora = obtenerHora(tarea.r);
-                            const fecha = obtenerFecha(tarea.at);
-                            const estado = tarea.st.e;
-                            reglasArray.push({dias,nombre,comando,hora,unidades,estado,id,fecha,comandoTipo})
-                        });
-                        callback(reglasArray);
-                    }
-                });
-            }
+        new Promise(()=>{
+            var data = armarTarea(nuevaTarea);
+            console.log(data)
+            var params = {
+                params:data
+            };
+            self.session.execute('resource/update_job', params, function (data) {
+                console.log(data);
+                if (data.error) {
+                    callback(data);
+                } else {
+                    var params = {
+                        params:{
+                            "itemId":105
+                        }
+                    };
+                    self.session.execute('resource/get_job_data', params, function (data) {
+                        if (data.error) {
+                            callback(data);
+                        } else {
+                            data = data.filter( job => job.act.t === "exec_unit_cmd" )
+                            const reglasArray = [];
+                            data.forEach(tarea => {
+                                const id = tarea.id;
+                                const dias = obtenerDias(tarea.sch.w);
+                                const nombre = tarea.n;
+                                const comando = tarea.act.p.cmd_name;
+                                const comandoTipo = tarea.act.p.cmd_type;
+                                const unidades = obtenerUnidades(tarea.act.p.units);
+                                const hora = obtenerHora(tarea.r);
+                                const fecha = obtenerFecha(tarea.at);
+                                const estado = tarea.st.e;
+                                reglasArray.push({dias,nombre,comando,hora,unidades,estado,id,fecha,comandoTipo});
+                            });
+                            callback(reglasArray);
+                        }
+                    });
+                }
+            });
         });
     }
+    deleteJob(idJob,callback){
+        const self = this;
+        new Promise(()=>{
+            var params = {
+                params:{
+                    "id": idJob,
+                    "itemId": 105,
+                    "callMode": "delete"
+                }
+            };
+            self.session.execute('resource/update_job', params, function (data) {
+                console.log(data);
+                if (data.error) {
+                    callback(data);
+                } else {
+                    callback(data);
+                }
+            });
+        });
+    }
+    deactivateJob(idJob,callback){
+        const self = this;
+        new Promise(()=>{
+            var params = {
+                params:{
+                    "id":idJob,
+                    "e":0,
+                    "itemId":105,
+                    "callMode":"enable"
+                }
+            };
+            self.session.execute('resource/update_job', params, function (data) {
+                console.log(data);
+                if (data.error) {
+                    callback(data);
+                } else {
+                    callback(data);
+                }
+            });
+        });
+    }
+    activateJob(idJob,callback){
+        const self = this;
+        new Promise(()=>{
+            var params = {
+                params:{
+                    "id":idJob,
+                    "e":1,
+                    "itemId":105,
+                    "callMode":"enable"
+                }
+            };
+            self.session.execute('resource/update_job', params, function (data) {
+                console.log(data);
+                if (data.error) {
+                    callback(data);
+                } else {
+                    callback(data);
+                }
+            });
+        });
+    }
+    //
     showGroups(callback){
         const self = this;
         new Promise(() => {
@@ -523,7 +593,7 @@ const armarTarea = (tarea) => {
         "id": 0,
         "itemId": 105,
         "callMode": "create"
-    }
+    };
     return tareaNueva;
 }
 const obtenerFecha = (fecha) => {

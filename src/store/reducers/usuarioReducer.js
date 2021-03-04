@@ -1,10 +1,10 @@
-import { 
+import {
     SAVE_TOKEN,
     LOGOUT,
     START_SAVE_TOKEN,
     SAVE_USER,
     LOGOUT_USUARIO
- } from '../types';
+} from '../types';
 
 const initialState = {
     token : '',

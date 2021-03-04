@@ -11,7 +11,16 @@ import {
     UPDATE_JOBS_ERROR,
     START_CREATE_JOBS,
     CREATE_JOBS_EXITO,
-    CREATE_JOBS_ERROR
+    CREATE_JOBS_ERROR,
+    START_DELETE_JOBS,
+    DELETE_JOBS_EXITO,
+    DELETE_JOBS_ERROR,
+    START_ACTIVATE_JOBS,
+    ACTIVATE_JOBS_EXITO,
+    ACTIVATE_JOBS_ERROR,
+    START_DEACTIVATE_JOBS,
+    DEACTIVATE_JOBS_EXITO,
+    DEACTIVATE_JOBS_ERROR
 } from '../types';
 
 export function getJobsAction(wialonObjeto) {
@@ -137,6 +146,99 @@ const createJobsExito = (jobs) => ({
 })
 const createJobsError = () => ({
     type: CREATE_JOBS_ERROR
+})
+
+export function deleteJobAction(idJob,wialonObjeto) {
+    return async (dispatch) => {
+        dispatch( startDeleteJobsAction() );
+        try {
+            new Promise(() => {
+                wialonObjeto.deleteJob( idJob,function(data) {
+                    console.log(data);
+                    if (data.error) {
+                        dispatch( deleteJobsError() );
+                    } else {
+                        console.log(data[0]);
+                        dispatch( deleteJobsExito(data[0]) );
+                    }
+                });
+            });
+        } catch (error) {
+            dispatch( deleteJobsError() )
+            console.log(error);
+        }
+    }
+};
+const startDeleteJobsAction = () => ({
+    type: START_DELETE_JOBS
+});
+const deleteJobsExito = (idJob) => ({
+    type: DELETE_JOBS_EXITO,
+    payload: idJob
+});
+const deleteJobsError = () => ({
+    type: DELETE_JOBS_ERROR
+});
+
+export function activateJobsAction(idJob,wialonObjeto) {
+    return async (dispatch) => {
+        dispatch( startActivateJobsAction() );
+        try {
+            new Promise(() => {
+                wialonObjeto.activateJob( idJob,function(data) {
+                    console.log(data);
+                    if (data.error) {
+                        dispatch( activateJobsError() );
+                    } else {
+                        dispatch( activateJobsExito(data[0]) );
+                    }
+                });
+            });
+        } catch (error) {
+            dispatch( activateJobsError() )
+            console.log(error);
+        }
+    }
+}
+const startActivateJobsAction = () => ({
+    type: START_ACTIVATE_JOBS
+})
+const activateJobsExito = (idJob) => ({
+    type: ACTIVATE_JOBS_EXITO,
+    payload: idJob
+})
+const activateJobsError = () => ({
+    type: ACTIVATE_JOBS_ERROR
+})
+export function deactivateJobsAction(idJob,wialonObjeto) {
+    return async (dispatch) => {
+        dispatch( startDeactivateJobsAction() );
+        try {
+            new Promise(() => {
+                wialonObjeto.deactivateJob(idJob, function(data) {
+                    console.log(data);
+                    if (data.error) {
+                        dispatch( deactivateJobsError() );
+                    } else {
+                        dispatch( deactivateJobsExito(data[0]) );
+                    }
+                });
+            });
+        } catch (error) {
+            dispatch( deactivateJobsError() )
+            console.log(error);
+        }
+    }
+}
+const startDeactivateJobsAction = () => ({
+    type: START_DEACTIVATE_JOBS
+})
+const deactivateJobsExito = (idJob) => ({
+    type: DEACTIVATE_JOBS_EXITO,
+    payload: idJob
+})
+const deactivateJobsError = () => ({
+    type: DEACTIVATE_JOBS_ERROR
 })
 
 export function logoutTareasAction() {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
-const Jobs = ({unitsJobs,jobsModal,editJob}) => {
-    return ( 
+const Jobs = ({unitsJobs,jobsModal,editJob,deleteJob,activateJob,deactivateJob}) => {
+    return (
         <Container className="">
-            <Card >
+            <Card style={{overflowY:"auto", maxHeight:"900px"}}>
                 <Card.Title>Tareas</Card.Title>
                     {
                     jobsModal.map(job => (
@@ -14,7 +14,7 @@ const Jobs = ({unitsJobs,jobsModal,editJob}) => {
                                 <Col xs lg="8" style={{textAlign:'left'}}>
                                     Hora: {job.hora}<br></br>
                                     {
-                                        job.dias.length > 0 ? 
+                                        job.dias.length > 0 ?
                                             <span>
                                                 Dias: {job.dias.join()}<br></br>
                                             </span>
@@ -26,9 +26,19 @@ const Jobs = ({unitsJobs,jobsModal,editJob}) => {
                                     Comando: {job.comando}<br></br>
                                 </Col>
                                 <Col xs lg="4">
-                                    <button>Parar</button><br></br>
-                                    <button>Iniciar</button><br></br>
-                                    <button>Eliminar</button>
+                                    {
+                                        !job.estado ?
+                                        <>
+                                            <button disabled >Parar</button><br></br>
+                                            <button onClick={ e => activateJob(e,job.id)}>Iniciar</button><br></br>
+                                            </>
+                                        :
+                                            <>
+                                            <button onClick={ e => deactivateJob(e,job.id)}>Parar</button><br></br>
+                                            <button disabled >Iniciar</button><br></br>
+                                            </>
+                                    }
+                                    <button onClick={ e => deleteJob(e,job.id) }>Eliminar</button>
                                 </Col>
                             </Row>
                             <Card.Footer>
@@ -40,7 +50,6 @@ const Jobs = ({unitsJobs,jobsModal,editJob}) => {
                     }
             </Card>
         </Container>
-     );
+    );
 }
- 
 export default Jobs;

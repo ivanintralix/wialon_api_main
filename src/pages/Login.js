@@ -31,7 +31,11 @@ const Login = () => {
   };
   return (
     <div>
+        <video id="myVideo" autoPlay="true" muted loop>
+          <source src="http://www.intralix.com/videos/Compress-transcode.mp4" type="video/mp4" />
+        </video>
         <iframe
+        className="content"
         id="iframeInicio"
         src="http://gps.intralix.com/login.html?client_id=myApp&access_type=0xFFFFFFFF&activation_time=0&duration=604800&flags=0xFFFFFFFF&response_type=hash&redirect_uri=http://gps.intralix.com/post_token.html"
         title="Inline Frame Example"

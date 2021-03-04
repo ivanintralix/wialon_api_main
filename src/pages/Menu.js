@@ -12,21 +12,24 @@ import { logoutGruposAction } from "../store/actions/gruposActions";
 import { logoutCMDSAction } from "../store/actions/CMDSActions";
 
 import { useHistory } from "react-router-dom";
-
 import { Link } from "react-router-dom";
+import logo_escudo_intralix_blanco from "../img/logo-escudo-intralix-1.png";
+import logo_chico_blanco from "../img/logo-chico-blanco.png";
 const MenuLateral = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [collapsed, setCollapsed] = useState(true);
+  const [imgHeader, setImgHeader] = useState(logo_escudo_intralix_blanco);
 
   const outSidebar = () => {
     setCollapsed(true)
   }
 
   const openSidebar = () => {
-    setCollapsed(false)
+    setCollapsed(false);
+    collapsed ? setImgHeader(logo_escudo_intralix_blanco) : setImgHeader(logo_chico_blanco);
   }
 
   const logOut = () => {
@@ -45,25 +48,24 @@ const MenuLateral = () => {
       breakPoint="md"
       onMouseLeave={() => outSidebar()}
     >
-      <SidebarHeader>
+      <SidebarHeader className="sidebarHeader">
         <div
           style={{
-            padding: '24px',
+            padding: '10px',
             textTransform: 'uppercase',
             fontWeight: 'bold',
-            fontSize: 14,
+            fontSize: 18,
             letterSpacing: '1px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
+            textAlign: "-webkit-center"
           }}
         >
-          <FaLock
-            onClick={() => openSidebar()}
-          />
+          <img src={imgHeader} width="40" onClick={() => openSidebar()} />
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="sidebarBody">
         <Menu iconShape="round">
           <MenuItem icon={<FaLock />}>
             <Link to={'/panel'} className="text-light">Panel</Link>
@@ -76,7 +78,7 @@ const MenuLateral = () => {
           </MenuItem>
         </Menu>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="sidebarFooter">
           <Menu iconShape="circle">
             <MenuItem onClick={() => logOut()} icon={<FaSignOutAlt />}>Salir</MenuItem>
           </Menu>

@@ -84,3 +84,18 @@ body, html, .App, #root, .outer {
 .containerReglas{
   margin-left: 0px !important;
 }
+
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
+}
+.content {
+  position: sticky;
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1;
+  padding: 20px;
+  margin: 50px 0 0 0;
+}
