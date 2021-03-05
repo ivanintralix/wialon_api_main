@@ -111,7 +111,7 @@ button:hover {
     color: #ffffff !important;
     border: 2px solid #0a7b3e !important;
 }
-.successWarnig{
+.warnigButton{
     background-color: #ffc107 !important;
     color: #000000 !important;
     border: 2px solid #ffc107 !important;
@@ -120,4 +120,9 @@ button:hover {
     background-color: #dc3545 !important;
     color: #ffffff !important;
     border: 2px solid #dc3545 !important;
+}
+.intralixButton {
+    background-color: #15375b !important;
+    color: #ffffff !important;
+    border: 2px solid #15375b !important;
 }

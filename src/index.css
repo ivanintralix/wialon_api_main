@@ -65,26 +65,6 @@ body, html, .App, #root, .outer {
   color: #167bff;
 }
 
-.table td, .table th {
-  padding: 4px 4px 0px 4px !important;
-  border-top: 1px solid #1269b3 !important;
-}
-
-.table thead th {
-  border-bottom: 2px solid #15375b !important;
-}
-
-.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
-  max-width: none !important;
-  width: auto !important;
-  /* margin-right: -80px; */
-  margin-left: 80px  !important;
-}
-
-.containerReglas{
-  margin-left: 0px !important;
-}
-
 #myVideo {
   position: fixed;
   right: 0;
@@ -99,3 +79,4 @@ body, html, .App, #root, .outer {
   padding: 20px;
   margin: 50px 0 0 0;
 }
+

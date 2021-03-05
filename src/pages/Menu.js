@@ -49,6 +49,31 @@ const MenuLateral = () => {
     dispatch( logoutCMDSAction() );
     history.push('/login');
   }
+  return(
+    <>
+      <div className="topnav">
+        <img src={logo_chico_blanco} width="150" />
+        <div>
+          <Link to={'/panel'} >
+            <FaDesktop size="20" />
+            Panel
+          </Link>
+            <Link to={'/Equipos'} >
+              <FaSatelliteDish size="20" />
+              Equipos
+            </Link>
+            <Link to={'/Reglas'} >
+              <FaClipboardCheck size="20" />
+              Reglas
+            </Link>
+            <Link className="salir" onClick={() => logOut()}>
+              <FaSignOutAlt size="25" />
+            </Link>
+        </div>
+      </div>
+    </>
+  )
+  /*
   return (
     <ProSidebar
       className='sidebarinicio'
@@ -98,6 +123,6 @@ const MenuLateral = () => {
       </SidebarFooter>
     </ProSidebar>
   );
+  */
 }
- 
 export default MenuLateral;

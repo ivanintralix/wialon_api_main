@@ -1,10 +1,12 @@
 .sidebaracciones {
   position: absolute !important;
-  top: 0;
+  top: 53px;
   bottom: 0;
   right: 0;
+  left: 0;
   max-width: 290px !important;
   min-width: 290px !important;
+  height: auto !important;
 }
 .sidebarMNHeader {
     text-align: -webkit-center;

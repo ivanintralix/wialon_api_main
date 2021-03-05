@@ -122,8 +122,8 @@ const NuevaRegla = ({setNuevaRegla, filtrarUnidadesComando, addUnitNewJob}) => {
                             />
                     }
                     <br></br><br></br><br></br>
-                    <button onClick={ () => setNuevaRegla(false) } style={{float:"left"}} >Cancelar</button>
-                    <button onClick={ e => guardarNuevaTarea(e) } style={{float:"right"}} >Agregar</button>
+                    <button className="dangerButton" onClick={ () => setNuevaRegla(false) } style={{float:"left"}} >Cancelar</button>
+                    <button className="successButton" onClick={ e => guardarNuevaTarea(e) } style={{float:"right"}} >Agregar</button>
                 </Card.Body>
             </Card>
         </Container>

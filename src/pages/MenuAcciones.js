@@ -160,7 +160,7 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
         <SidebarHeader className="sidebarHeader">
           <div className='sidebarMNHeader' >
             <button className="successButton" onClick={ e => cmdAlert(e,"Posición") } >Abrir</button>{' '}
-            <button className="successWarnig" onClick={ e => cmdAlert(e,"Posición") } >Restablecer</button>{' '}
+            <button className="warnigButton" onClick={ e => cmdAlert(e,"Posición") } >Restablecer</button>{' '}
             <button className="dangerButton" onClick={ e => cmdAlert(e,"Posición") } >Cerrar</button>{' '}
             <br></br><br></br>
             <InputGroup onChange={ buscarUnidad } size="sm" className="mb-3">

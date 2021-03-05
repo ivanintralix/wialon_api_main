@@ -131,8 +131,7 @@ const Equipos = () => {
     }
     return (
         <Main>
-            <Card className="text-center">
-                <Card.Header>Grupos</Card.Header>
+            <Card className="text-center equiposBody">
                 <Card.Body>
                     <Card.Title>
                         {
@@ -144,10 +143,10 @@ const Equipos = () => {
                             <Col>
                                 {
                                     flagCreateGroup ?
-                                        <input 
-                                            id="inputGroup-sizing-sm" 
-                                            placeholder="Nombre del grupo" 
-                                            className="inputBlack" 
+                                        <input
+                                            id="inputGroup-sizing-sm"
+                                            placeholder="Nombre del grupo"
+                                            className="inputBlack"
                                             onChange={ e => nameGroupChange(e) }
                                         />
                                     :
@@ -172,33 +171,33 @@ const Equipos = () => {
                                     flagCreateGroup ?
                                         null
                                     :
-                                        <button onClick={ e => confirmDelete(e) }>Eliminar grupo</button>
+                                        <button className="dangerButton" onClick={ e => confirmDelete(e) }>Eliminar grupo</button>
                                 }
                             </Col>
                             <Col>
                                 {
                                     flagCreateGroup ?
-                                        <button onClick={e => cancelGroup(e) }>Cancelar</button>
+                                        <button className="warnigButton" onClick={e => cancelGroup(e) }>Cancelar</button>
                                     :
-                                        <button onClick={ e => addGroupModal(e) }>Crear Grupo</button>
+                                        <button className="successButton" onClick={ e => addGroupModal(e) }>Crear Grupo</button>
                                 }
                             </Col>
                         </Row>
                         <Row>
                             <Col onDrop={(e) => dropUnidades(e)} onDragOver={(e) => allowDrop(e)}>
-                                <Card>
+                                <Card className="cardUnidadesGrupos" >
                                     <Card.Header>Unidades Disponibles</Card.Header>
                                     <Card.Body style={{ maxHeight:"500px", overflowY:"auto"}} >
                                         <Card.Title><input onChange={ e => buscarUnidad(e) } id="inputGroup-sizing-sm" className="inputBlack" /><FaSearch /></Card.Title>
-                                        <div id="UnidadesDiv">
+                                        <div id="UnidadesDiv" >
                                             {
                                                 unidadesModal.map(unidad => (
-                                                    <div 
-                                                        key={"U" + unidad.id} 
-                                                        id={unidad.id} 
-                                                        draggable="true" 
-                                                        style={{cursor: "pointer", borderStyle:"outset", marginTop:"5px"}} 
-                                                        onDragStart={e => drag(e)} 
+                                                    <div
+                                                        key={"U" + unidad.id}
+                                                        id={unidad.id}
+                                                        draggable="true"
+                                                        className="unidad"
+                                                        onDragStart={e => drag(e)}
                                                     >
                                                         <span><FaLock size={20} /> Unidad: {unidad.nm}</span>
                                                         <input className="checbokUnidad" type="checkbox"  />
@@ -211,18 +210,18 @@ const Equipos = () => {
                                 </Card>
                             </Col>
                             <Col onDrop={(e) => drop(e)} onDragOver={(e) => allowDrop(e)}>
-                                <Card >
+                                <Card className="cardUnidadesDisponibles" >
                                     <Card.Header>Unidades Grupo: {tituloGrupo}</Card.Header>
                                     <Card.Body style={{ maxHeight:"500px", overflowY:"auto"}} >
                                         <div id="GrupoDiv" >
                                             {
                                                 unidadesGrupo.map(unidad => (
-                                                    <div 
-                                                        key={"G"+unidad} 
-                                                        id={unidad} 
-                                                        draggable="true" 
-                                                        style={{cursor: "pointer", borderStyle:"outset", marginTop:"5px"}} 
-                                                        onDragStart={e => drag(e)} 
+                                                    <div
+                                                        key={"G"+unidad}
+                                                        id={unidad}
+                                                        draggable="true"
+                                                        className="unidad"
+                                                        onDragStart={e => drag(e)}
                                                     >
                                                         <span><FaLock size={20} /> Unidad: {(unidades.filter(unidad2 => unidad === unidad2.id))[0].nm}</span>
                                                         <input className="checbokUnidad" id={"checbokUnidadGrupo"+unidad} type="checkbox"  />
@@ -235,9 +234,9 @@ const Equipos = () => {
                                     <Card.Footer>
                                         {
                                             flagCreateGroup ?
-                                                <button style={{float:"right"}} onClick={e => addGroup(e)}>Guardar grupo</button>
+                                                <button className="successButton" style={{float:"right"}} onClick={e => addGroup(e)}>Guardar grupo</button>
                                             :
-                                                <button style={{float:"right"}} onClick={e => addUnitsGroup(e)}>Guardar</button>
+                                                <button className="successButton" style={{float:"right"}} onClick={e => addUnitsGroup(e)}>Guardar</button>
                                         }
                                     </Card.Footer>
                                 </Card>

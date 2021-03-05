@@ -147,8 +147,8 @@ const EditarRegla = ({jobId,setEditarRegla}) => {
                                     />
                                 }
                                 <br></br><br></br><br></br>
-                                <button onClick={ () => setEditarRegla(false) } style={{float:"left"}} >Cancelar</button>
-                                <button onClick={ (e) => updateJob(e) } style={{float:"right"}} >Agregar</button>
+                                <button className="warnigButton" onClick={ () => setEditarRegla(false) } style={{float:"left"}} >Cancelar</button>
+                                <button className="successButton" onClick={ (e) => updateJob(e) } style={{float:"right"}} >Agregar</button>
                             </Card.Body>
                         </Card>
                     </Container>

@@ -75,7 +75,6 @@ const VerUnidades = ({setVerunidades,jobId}) => {
     }
     const dropUnidades = e => {
         e.preventDefault();
-        
         const data = e.dataTransfer.getData("text");
         let newGrupo = unidadesJobs.filter(grupo => grupo !== parseInt(data) )
         unidadesJobs.map(unidad => {
@@ -85,7 +84,6 @@ const VerUnidades = ({setVerunidades,jobId}) => {
             }
         });
         setUnidadesJobs(newGrupo);
-        
     }
 
     const guardarUnidadesTareas = e => {
@@ -93,28 +91,27 @@ const VerUnidades = ({setVerunidades,jobId}) => {
         console.log(unidadesJobs);
         console.log(jobId);
         dispatch( updateUnitsJobsAction( jobId,unidadesJobs.join(),wialonObject ) );
-        
     }
-    return ( 
+    return (
         <Container className="popoverPanale">
             <Card style={{ width: '50rem', marginTop:"10px" }}>
                 <Card.Body>
                     {/** */}
                     <Row>
                         <Col onDrop={(e) => dropUnidades(e)} onDragOver={(e) => allowDrop(e)}>
-                            <Card>
+                            <Card className="cardAsignarUnidadestarea">
                                 <Card.Header>Unidades disponibles</Card.Header>
                                 <Card.Body style={{ maxHeight:"500px", overflowY:"auto"}} >
                                     <Card.Title><input onChange={ e => buscarUnidadModal(e) } id="inputGroup-sizing-sm" className="inputBlack" /><FaSearch /></Card.Title>
                                     <div id="UnidadesDiv">
                                         {
                                             unidadesModal.map(unidad => (
-                                                <div 
-                                                    key={"Reglas_U" + unidad.id} 
-                                                    id={unidad.id} 
-                                                    draggable="true" 
-                                                    style={{cursor: "pointer", borderStyle:"outset", marginTop:"5px"}} 
-                                                    onDragStart={e => drag(e)}     
+                                                <div
+                                                    key={"Reglas_U" + unidad.id}
+                                                    id={unidad.id}
+                                                    draggable="true"
+                                                    className="unidad"
+                                                    onDragStart={e => drag(e)}
                                                 >
                                                     <span><FaLock size={20} /> Unidad: {unidad.nm}</span>
                                                     <input className="checbokUnidad" id={"checboxUnidad"+unidad.id} type="checkbox"  />
@@ -127,21 +124,20 @@ const VerUnidades = ({setVerunidades,jobId}) => {
                             </Card>
                         </Col>
                         <Col onDrop={(e) => drop(e)} onDragOver={(e) => allowDrop(e)}>
-                            <Card >
+                            <Card className="cardUnidadestarea" >
                                 <Card.Header>Unidades tarea</Card.Header>
                                 <Card.Body style={{ maxHeight:"500px", overflowY:"auto"}} >
                                     <div id="GrupoDiv" >
                                         {
                                             unidadesJobs.map(unidad => (
-                                                <div 
-                                                    key={"Reglas_J"+unidad} 
-                                                    id={unidad} 
-                                                    draggable="true" 
-                                                    style={{cursor: "pointer", borderStyle:"outset", marginTop:"5px"}}
-                                                    onDragStart={e => drag(e)} 
+                                                <div
+                                                    key={"Reglas_J"+unidad}
+                                                    id={unidad}
+                                                    draggable="true"
+                                                    className="unidad"
+                                                    onDragStart={e => drag(e)}
                                                 >
                                                     <span><FaLock size={20} /> Unidad: {
-                                                        
                                                         unidades.filter(unidadG => (unidadG.id === unidad))[0].nm
                                                     }</span>
                                                     <input className="checbokUnidad" id={"checboxUnidadJob"+unidad} type="checkbox"  />
@@ -157,12 +153,11 @@ const VerUnidades = ({setVerunidades,jobId}) => {
                     {/** */}
                 </Card.Body>
                 <Card.Footer>
-                        <button style={{float:"right"}} onClick={e => guardarUnidadesTareas(e)}>Guardar</button>
-                        <button style={{float:"right"}} onClick={() => setVerunidades(false)}>Cancelar</button>
+                        <button className="successButton" style={{float:"right"}} onClick={e => guardarUnidadesTareas(e)}>Guardar</button>
+                        <button className="warnigButton" style={{float:"right"}} onClick={() => setVerunidades(false)}>Cancelar</button>
                 </Card.Footer>
             </Card>
         </Container>
-     );
+    );
 }
- 
 export default VerUnidades;

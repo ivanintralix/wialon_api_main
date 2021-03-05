@@ -1,0 +1,11 @@
+.leaflet-container {
+    min-height:100%;
+    max-height: 100%;
+}
+.mapaInicio{
+    position: absolute;
+    left: 290px !important;
+    right: 0 !important;
+    top: 53px !important;
+    bottom: 0 !important;
+}

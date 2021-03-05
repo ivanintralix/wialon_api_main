@@ -13,13 +13,11 @@ const DesktopContainer = ({children}) => {
             <MenuLateral />
             {children}
           </Fragment>
-        : 
+        :
           <Redirect to='/login' />
-      
       }
     </div>
-  )
-  
+  );
 }
 
 export default DesktopContainer;

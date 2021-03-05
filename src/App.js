@@ -5,6 +5,9 @@ import './index.css'
 import './css/Menu.css'
 import './css/MenuAcciones.css';
 import './css/intralix.css';
+import './css/MapaOSM.css';
+import './css/Equipos.css';
+import './css/Reglas.css';
 
 import Login from './pages/Login';
 import PrivateRoute from './pages/PrivateRoute';

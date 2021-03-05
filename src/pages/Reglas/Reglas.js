@@ -51,10 +51,9 @@ const Reglas = () => {
     //const [unidadesJob, setUnidadesJob] = useState([]);
     const [jobId,setJobId] = useState(0);
     const [editarRegla, setEditarRegla] = useState(false);
-    const [comandoNuevaRegla, setComandoNuevaRegla] = useState("Posición");
+    const [comandoNuevaRegla, setComandoNuevaRegla] = useState(CMDSDefault[0].cmd_name);
     const [unidadesCheck,setUnidadesCheck] = useState([]);
     const wialonObject = useSelector(state => state.usuario.user);
-
     useEffect(() => {
         jobsModal.forEach(jobModal => {
             const found = jobs.find(job => job.id === jobModal.id );
@@ -79,7 +78,7 @@ const Reglas = () => {
                 var total = document.getElementsByName(unidad + "SpanGrupoTareas").length;
                 for(var i=0;i<total;i++){
                     const domElement = document.getElementsByName(unidad + "SpanGrupoTareas")[i];
-                    domElement.style.color = "black";
+                    domElement.style.color = "#1269b3";
                 }
                 var total = document.getElementsByName(unidad + "checkbox").length;
                 for(var i=0;i<total;i++){
@@ -100,7 +99,7 @@ const Reglas = () => {
                         var total = document.getElementsByName(unidad + "SpanGrupoTareas").length;
                         for(var i=0;i<total;i++){
                             const domElement = document.getElementsByName(unidad + "SpanGrupoTareas")[i];
-                            domElement.style.color = "red";
+                            domElement.style.color = "#dc3545";
                         }
                         var total = document.getElementsByName(unidad + "checkbox").length;
                         for(var i=0;i<total;i++){
@@ -192,7 +191,7 @@ const Reglas = () => {
     const confirmNuevaRegla = e => {
         e.preventDefault();
         setJobsModal([]);
-        filtrarUnidadesComando(null,"Posición");
+        filtrarUnidadesComando(null,CMDSDefault[0].cmd_name);
         setNuevaRegla(true);
     }
     const showJobsUnit = (e,unidad) => {
@@ -274,7 +273,7 @@ const Reglas = () => {
     }
     return (
         <Main>
-            <Container className="containerReglas">
+            <Container className="reglasBody">
                 <Row>
                     <Col xs lg="6">
                         {
@@ -282,12 +281,12 @@ const Reglas = () => {
                                 <Card>
                                     <Card.Body style={{overflowY:"auto"}} >
                                         <Card.Title style={{ margin:"10px 0 10px 0", textAlign:"-webkit-right"}}>
-                                            <button onClick={ e => confirmNuevaRegla(e) }>Nueva regla</button>
+                                            <button className="successButton" onClick={ e => confirmNuevaRegla(e) }>Nueva regla</button>
                                         </Card.Title>
                                         <Card.Title style={{ margin:"10px 0 10px 0" }}>
                                             <input onChange={ e => buscarUnidad(e) } id="inputGroup-sizing-sm" className="inputBlack" /><FaSearch />
                                         </Card.Title>
-                                        <div style={{overflowY:"auto",height: "800px"}}>
+                                        <div className="divGruposReglas">
                                         {
                                             gruposModal.length > 0 ?
                                                 gruposModal.map(grupo => (
@@ -299,8 +298,10 @@ const Reglas = () => {
                                                                 <Accordion.Toggle as={Button} variant="link" eventKey="1">
                                                                     <FaArrowAltCircleDown />{grupo.d.nm}
                                                                 </Accordion.Toggle>
-                                                                <span><FaTasks onClick={e => showJobsGroup(e,grupo.d.id)}></FaTasks></span>
-                                                                <input className="checbokGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
+                                                                <span>
+                                                                    <FaTasks onClick={e => showJobsGroup(e,grupo.d.id)}></FaTasks>
+                                                                    <input className="checbokGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
+                                                                </span>
                                                             </Card.Header>
                                                             <Accordion.Collapse eventKey="1">
                                                                 {/**Todas las unidades del grupo */}
@@ -308,13 +309,14 @@ const Reglas = () => {
                                                                     {
                                                                         grupo.d.u.map(unidad => (
                                                                             <span key={unidad + "MA"} style={{cursor: "pointer"}} >
-                                                                            <span name={unidad+"SpanGrupoTareas"} ><FaLock size={20} /> Unidad:
+                                                                            <span onClick={e => showJobsUnit(e,unidad)} name={unidad+"SpanGrupoTareas"} ><FaLock size={20} /> Unidad:
                                                                                 {
                                                                                     (unidades.filter(unidad2 => unidad === unidad2.id))[0].nm
                                                                                 }
                                                                             </span>
-                                                                            <FaTasks onClick={e => showJobsUnit(e,unidad)}></FaTasks>
+                                                                            
                                                                             <input className="checbokUnidad" type="checkbox" id={unidad + "checkbox"} name={unidad + "checkbox"} onChange={ e => addDevice(e) } />
+                                                                            {/*<FaTasks onClick={e => showJobsUnit(e,unidad)}></FaTasks>*/}
                                                                             <br></br>
                                                                             </span>
                                                                         ))
