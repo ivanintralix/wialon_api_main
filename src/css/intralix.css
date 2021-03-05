@@ -7,6 +7,7 @@
         #37bdee
         #0a7b3e
 */
+@import url("https://fonts.googleapis.com/css?family=Helvetica+Neue");
 body {
     font-family: "Helvetica Neue" !important;
     font-weight: lighter !important;
@@ -19,11 +20,29 @@ p, label {
 h1, h2, h3, h4, h5, h6 {
     font-family: "Helvetica Neue" !important;
 }
+/*Clases de variantes de input*/
 .inputBlack{
     color:black !important;
     inline-size: inherit;
+    border-bottom: 2px solid #000000 !important;
 }
-
+.inputBlack:focus {
+    padding-bottom: 6px !important;
+    border-width: 3px !important;
+    border-image: linear-gradient(to right, #000000,#000000) !important;
+    border-image-slice: 1 !important;
+}
+.inputWhite{
+    color:#adadad !important;
+    inline-size: inherit;
+    border-bottom: 2px solid #adadad !important;
+}
+.inputWhite:focus {
+    padding-bottom: 6px !important;
+    border-width: 3px !important;
+    border-image: linear-gradient(to right, #adadad,#ffffff) !important;
+    border-image-slice: 1 !important;
+}
 input {
     border: 0 !important;
     border-bottom: 2px solid #15375b !important;
@@ -34,11 +53,15 @@ input {
     background-color: transparent !important;
 }
 input:focus {
+    box-shadow: none !important;
+}
+input:focus {
     padding-bottom: 6px !important;
     border-width: 3px !important;
     border-image: linear-gradient(to right, #15375b,#1269b3) !important;
     border-image-slice: 1 !important;
 }
+/*fin clases de variantes de input*/
 select {
     min-width: 100px !important;
     border: 0 !important;
@@ -74,4 +97,27 @@ textarea:focus {
     transition: opacity .3s ease;
     max-width: 100% !important;
     text-align: -webkit-center;
-  }
+}
+button {
+    padding: 2px 8px 2px 8px !important;
+    margin: 0 2px 0 2px !important;
+    border-radius: 6px !important;
+}
+button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.successButton{
+    background-color: #0a7b3e !important;
+    color: #ffffff !important;
+    border: 2px solid #0a7b3e !important;
+}
+.successWarnig{
+    background-color: #ffc107 !important;
+    color: #000000 !important;
+    border: 2px solid #ffc107 !important;
+}
+.dangerButton {
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    border: 2px solid #dc3545 !important;
+}

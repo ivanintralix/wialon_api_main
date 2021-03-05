@@ -157,30 +157,30 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
   return (
       <>
       <ProSidebar className='sidebaracciones' >
-        <SidebarHeader>
+        <SidebarHeader className="sidebarHeader">
           <div className='sidebarMNHeader' >
-            <Button variant="outline-success" onClick={ e => cmdAlert(e,"Posición") } >Abrir</Button>{' '}
-            <Button variant="outline-primary" onClick={ e => cmdAlert(e,"Posición") } >Restablecer</Button>{' '}
-            <Button variant="outline-warning" onClick={ e => cmdAlert(e,"Posición") } >Cerrar</Button>{' '}
+            <button className="successButton" onClick={ e => cmdAlert(e,"Posición") } >Abrir</button>{' '}
+            <button className="successWarnig" onClick={ e => cmdAlert(e,"Posición") } >Restablecer</button>{' '}
+            <button className="dangerButton" onClick={ e => cmdAlert(e,"Posición") } >Cerrar</button>{' '}
             <br></br><br></br>
             <InputGroup onChange={ buscarUnidad } size="sm" className="mb-3">
               <InputGroup.Prepend>
               <InputGroup.Text id="inputGroup-sizing-sm" className="iconBuscar" ><FaSearch /></InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+              <FormControl className="inputWhite"  aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
             </InputGroup>
           </div>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarContent className="sidebarBody">
           {/**Acordeon que me acumula todo un grupo */}
           {
             gruposModal.map(grupo => (
-                grupo.d.u.length > 0 ? 
+                grupo.d.u.length > 0 ?
                   (
                     <Accordion key={grupo.d.id + "G"} defaultActiveKey="0">
                       <Card>
                           <Card.Header >
-                              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                              <Accordion.Toggle as={Button} variant="" eventKey="1">
                                   <FaArrowAltCircleDown />{grupo.d.nm}
                               </Accordion.Toggle>
                               <input className="checbokGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
@@ -207,7 +207,7 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
             ))
           }
         </SidebarContent>
-        <SidebarFooter>
+        <SidebarFooter className="sidebarFooter">
           <div className="sidebar-btn-wrapper sidebarMNFooter" >
             <h2>Alertas</h2>
             <p style={{color: "red"}}>Unidad: 25789  Sistema violado</p>
@@ -216,9 +216,7 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
           </div>
         </SidebarFooter>
       </ProSidebar>
-     
       </>
     );
 }
- 
 export default MenuAcciones;

@@ -37,7 +37,7 @@ const Login = () => {
         <iframe
         className="content"
         id="iframeInicio"
-        src="http://gps.intralix.com/login.html?client_id=myApp&access_type=0xFFFFFFFF&activation_time=0&duration=604800&flags=0xFFFFFFFF&response_type=hash&redirect_uri=http://gps.intralix.com/post_token.html"
+        src="http://gps.intralix.com/login.html?client_id=myApp&access_type=0xFFFFFFFF&activation_time=0&duration=604800&flags=0xFFFFFFFF&response_type=hash&redirect_uri=http://gps.intralix.com/post_token.html&css_url=https://cocky-brahmagupta-e971ac.netlify.app/login.css"
         title="Inline Frame Example"
         width="500"
         height="500"

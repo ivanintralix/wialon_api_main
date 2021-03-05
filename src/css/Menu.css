@@ -4,16 +4,8 @@
   bottom: 0;
   right: 0;
   left: 0;
-  width: fit-content;
-  min-width: 0px;
-}
-.sidebaracciones {
-  position: absolute !important;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: fit-content;
-  min-width: 0px;
+  max-width: 190px !important;
+  min-width: auto !important;
 }
 .leaflet-container {
   min-height:100%;
@@ -37,4 +29,20 @@
 }
 .sidebarFooter{
   background-color: #15375b !important
+}
+
+.pro-sidebar .pro-menu.shaped .pro-menu-item > .pro-inner-item > .pro-icon-wrapper {
+  background: none !important;
+}
+.pro-inner-item a {
+  color : #adadad !important;
+  font-family: "Helvetica Neue" !important;
+  font-weight: lighter !important;
+  font-size: 1rem !important;
+}
+.pro-item-content {
+  color : #adadad !important;
+  font-family: "Helvetica Neue" !important;
+  font-weight: lighter !important;
+  font-size: 1rem !important;
 }

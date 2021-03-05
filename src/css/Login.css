@@ -1,0 +1,17 @@
+.content .permissions-container {
+    display: none;
+}
+
+.content .form-container {
+    background: url(../img/pattern.png) repeat-x left bottom, #ebebeb;
+    background: #ffffff;
+    border-top: 3px solid #1668b1;
+    box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+}
+
+.header {
+    background: url(http://www.intralix.com/images/logo-chico-blanco.png) no-repeat center center;
+    background-size: auto 65%;
+}

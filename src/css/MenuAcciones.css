@@ -1,3 +1,11 @@
+.sidebaracciones {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  max-width: 290px !important;
+  min-width: 290px !important;
+}
 .sidebarMNHeader {
     text-align: -webkit-center;
     padding: 24px 5px 24px 5px;
@@ -8,9 +16,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
 }
-
 .sidebarMNFooter {
     text-align: -webkit-center;
     padding: 0px 5px;
@@ -18,7 +24,6 @@
     max-height: 130px;
     overflow-y: auto;
 }
-
 .checbokGroup {
     right: 10px;
     position: absolute;
@@ -26,7 +31,6 @@
     height: 20px;
     width: 20px;
 }
-
 .checbokUnidad {
     float: right;
     height: 20px;
@@ -49,72 +53,110 @@
     border-top: 0 !important;
     border-right: 0 !important;
     border-left: 0 !important;
-    color: white !important;
+    color: #adadad !important;
 }
-
-
-
+.card-header {
+  padding: 0 0px 0 5px !important;
+}
+.sidebarHeader{
+  background-color: #15375b !important
+}
+.sidebarBody{
+  background-color: #15375b !important
+}
+.sidebarFooter{
+  background-color: #15375b !important
+}
 .checbokDias {
     height: 20px;
     width: 20px;
 }
-
 .switch {
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
-  }
-  
-  .switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #15375b;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: #1269b3;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #1269b3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #15375b;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+input:checked + .slider {
+  background-color: #1269b3;
+}
+input:focus + .slider {
+  box-shadow: 0 0 1px #1269b3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff !important;
+  background-clip: border-box;
+  border: 1px solid #15375b !important;
+  border-radius: 1.25rem !important;
+}
+.card-header {
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #fff !important;
+  border-bottom: 1px solid #fff !important;
+}
+.card-header > button {
+  color: #15375b;
+  padding: 5px !important;
+  margin: 0 !important;
+}
+.card-header > button:focus {
+  box-shadow: none !important;
+  color: #15375b !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+.btn-link:hover {
+  color: #15375b;
+  text-decoration: none;
+}
+.card-body > span {
+  color: #1269b3;
+}
