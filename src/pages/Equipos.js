@@ -115,18 +115,19 @@ const Equipos = () => {
     const buscarUnidad = e => {
         e.preventDefault();
         const nombre = e.target.value.toUpperCase();
-        const arrayUnidades = [];
+        let arrayUnidades = [];
         let tempUnidades = unidades;
-        tempUnidades.map(unidad => 
+        arrayUnidades = tempUnidades.map(unidad => 
             {
                 if(unidad.nm.toUpperCase().search(nombre) !== -1){
-                    arrayUnidades.push({
+                    return{
                         id: unidad.id,
                         nm: unidad.nm
-                    });
+                    };
                 }
             }
         );
+        arrayUnidades = arrayUnidades.filter(unidad => unidad !== undefined);
         setUnidadesModal(arrayUnidades);
     }
     return (
@@ -192,17 +193,17 @@ const Equipos = () => {
                                         <div id="UnidadesDiv" >
                                             {
                                                 unidadesModal.map(unidad => (
-                                                    <div
-                                                        key={"U" + unidad.id}
-                                                        id={unidad.id}
-                                                        draggable="true"
-                                                        className="unidad"
-                                                        onDragStart={e => drag(e)}
-                                                    >
-                                                        <span><FaLock size={20} /> Unidad: {unidad.nm}</span>
-                                                        <input className="checbokUnidad" type="checkbox"  />
-                                                        <br></br>
-                                                    </div>
+                                                        <div 
+                                                            key={"UGrupo" + unidad.id}
+                                                            id={unidad.id}
+                                                            draggable="true"
+                                                            className="unidad"
+                                                            onDragStart={e => drag(e)}
+                                                        >
+                                                            <span><FaLock size={20} /> Unidad: {unidad.nm}</span>
+                                                            <input className="checbokUnidad white" id={"checbokUnidadGrupo"+unidad} type="checkbox"  />
+                                                            <br></br>
+                                                        </div>
                                                 ))
                                             }
                                         </div>
@@ -224,7 +225,7 @@ const Equipos = () => {
                                                         onDragStart={e => drag(e)}
                                                     >
                                                         <span><FaLock size={20} /> Unidad: {(unidades.filter(unidad2 => unidad === unidad2.id))[0].nm}</span>
-                                                        <input className="checbokUnidad" id={"checbokUnidadGrupo"+unidad} type="checkbox"  />
+                                                        <input className="checbokUnidad white" id={"checbokUnidadGrupo"+unidad} type="checkbox"  />
                                                         <br></br>
                                                     </div>
                                                 ))
@@ -262,8 +263,8 @@ const Equipos = () => {
                         <Card style={{ width: '18rem', marginTop:"10px" }}>
                             <Card.Body>
                                 <Card.Text>Se eliminara el grupo <b>{tituloGrupo}</b></Card.Text>
-                                <button style={{float:"right"}} onClick={ e => deleteGroup(e) } >Confirmar</button>
-                                <button style={{float:"left"}} onClick={ e => cancelDelete(e) }>Cancelar</button>
+                                <button className="dangerButton" style={{float:"right"}} onClick={ e => deleteGroup(e) } >Confirmar</button>
+                                <button className="warnigButton" style={{float:"left"}} onClick={ e => cancelDelete(e) }>Cancelar</button>
                             </Card.Body>
                         </Card>
                     </Container>

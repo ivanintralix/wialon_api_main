@@ -183,7 +183,7 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
                               <Accordion.Toggle as={Button} variant="" eventKey="1">
                                   <FaArrowAltCircleDown />{grupo.d.nm}
                               </Accordion.Toggle>
-                              <input className="checbokGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
+                              <input className="checboxGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
                           </Card.Header>
                           <Accordion.Collapse eventKey="1">
                               {/**Todas las unidades del grupo */}

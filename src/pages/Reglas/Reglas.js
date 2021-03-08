@@ -300,7 +300,7 @@ const Reglas = () => {
                                                                 </Accordion.Toggle>
                                                                 <span>
                                                                     <FaTasks onClick={e => showJobsGroup(e,grupo.d.id)}></FaTasks>
-                                                                    <input className="checbokGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
+                                                                    <input className="checboxGroup" type="checkbox" id={grupo.d.id + "checkbox"} onChange={ (e) => addAllDevices(e,grupo) } />
                                                                 </span>
                                                             </Card.Header>
                                                             <Accordion.Collapse eventKey="1">

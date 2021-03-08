@@ -114,7 +114,7 @@ const VerUnidades = ({setVerunidades,jobId}) => {
                                                     onDragStart={e => drag(e)}
                                                 >
                                                     <span><FaLock size={20} /> Unidad: {unidad.nm}</span>
-                                                    <input className="checbokUnidad" id={"checboxUnidad"+unidad.id} type="checkbox"  />
+                                                    <input className="checbokUnidad white" id={"checboxUnidad"+unidad.id} type="checkbox"  />
                                                     <br></br>
                                                 </div>
                                             ))
@@ -140,7 +140,7 @@ const VerUnidades = ({setVerunidades,jobId}) => {
                                                     <span><FaLock size={20} /> Unidad: {
                                                         unidades.filter(unidadG => (unidadG.id === unidad))[0].nm
                                                     }</span>
-                                                    <input className="checbokUnidad" id={"checboxUnidadJob"+unidad} type="checkbox"  />
+                                                    <input className="checbokUnidad white" id={"checboxUnidadJob"+unidad} type="checkbox"  />
                                                     <br></br>
                                                 </div>
                                             ))
