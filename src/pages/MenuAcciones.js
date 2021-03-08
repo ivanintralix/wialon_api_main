@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 const MenuAcciones = ({grupos, positionCurrentMarket}) => {
   grupos = grupos.filter(grupo => grupo.d.u.length > 0);
   const CMDSUnidades = useSelector(state => state.CMDS.unidadesCMDS);
-
   const gruposFiltrados = grupos => {
     const newGR = grupos.map( grupo => {
         let nuevasUnidades = grupo.d.u.map(Uni => {
@@ -19,13 +18,11 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
             }
         });
         nuevasUnidades = nuevasUnidades.filter( uni => uni !== undefined);
-        //console.log(nuevasUnidades);
         if (nuevasUnidades.length > 0) {
             grupo.d.u = nuevasUnidades;
             return grupo;
         }
     });
-    //console.log(newGR);
     const gruposFiltrados = newGR.filter(grupo => grupo !== undefined)
     return gruposFiltrados;
   };
@@ -91,7 +88,6 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
       }
     })
   }
-
   const cmdAlert = (e,comandoString) => {
     e.preventDefault();
     console.log(comandoString);
@@ -99,9 +95,9 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
     const arrayUID = [];
     let stringU = "";
     unidades.forEach(unidad => {
-      const chek = document.getElementById(unidad.id+"checkbox").checked;
-      console.log(chek)
-      if (chek) {
+      const chek = document.getElementById(unidad.id+"checkbox");
+      console.log(chek);
+      if (chek !== null && chek.checked) {
         arrayUID.push(unidad.id);
         arrayU.push(unidad.nm);
         stringU +=unidad.nm+"<br/>"
@@ -114,8 +110,8 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
         html: `${stringU}`,
         showDenyButton: true,
         showCancelButton: true,
-        confirmButtonColor: '#cc3300',
-        focusConfirm: false,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#ffc107',
         confirmButtonText: `Enviar`,
       }).then((result) => {
         console.log(result)
@@ -134,7 +130,6 @@ const MenuAcciones = ({grupos, positionCurrentMarket}) => {
         title: 'Seleccione al menos una unidad'
       })
     }
-    
   }
   const cmd = (arrayUID,comandoString) => {
     wialonObject.enviarComando(arrayUID,comandoString,function(data,arrayError) {

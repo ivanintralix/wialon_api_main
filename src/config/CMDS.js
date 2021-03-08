@@ -1,4 +1,4 @@
-export const CMDSDefault = 
+export const CMDSDefault =
 [
     {
         cmd_name:"Abrir",

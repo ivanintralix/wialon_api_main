@@ -24,7 +24,6 @@ const MenuLateral = () => {
 
   const [collapsed, setCollapsed] = useState(true);
   const [imgHeader, setImgHeader] = useState(logo_escudo_intralix_blanco);
-  console.log(imgHeader)
   const outSidebar = () => {
     setCollapsed(true)
   }

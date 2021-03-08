@@ -52,26 +52,22 @@ const VerUnidades = ({setVerunidades,jobId}) => {
     }
     const drop = e => {
         e.preventDefault();
+        const arrayTemp = [];
         const data = e.dataTransfer.getData("text");
-        console.log(unidadesJobs);
         var repite = unidadesJobs.filter(unidad => parseInt(data) === unidad );
-        console.log(repite);
         if (repite.length <= 0) {
-            setUnidadesJobs([...unidadesJobs,parseInt(data)]);
+            arrayTemp.push(parseInt(data));
         }
-        console.log(unidades);
         unidades.map(unidadJob => {
             const UC = document.getElementById("checboxUnidad" + unidadJob.id);
-            if (UC !== null) {
-                console.log(UC);
-                if (UC.checked) {
-                    repite = unidadesJobs.filter(unidad => parseInt(unidadJob.id) === unidad );
-                    if (repite.length <= 0) {
-                        setUnidadesJobs([...unidadesJobs,parseInt(unidadJob.id)]);
-                    }
+            if (parseInt(data) !== unidadJob.id && UC !== null && UC.checked) {
+                repite = unidadesJobs.filter(unidad => parseInt(unidadJob.id) === unidad );
+                if (repite.length <= 0) {
+                    arrayTemp.push(parseInt(unidadJob.id));
                 }
             }
         });
+        setUnidadesJobs(unidadesJobs.concat(arrayTemp));
     }
     const dropUnidades = e => {
         e.preventDefault();
@@ -85,7 +81,6 @@ const VerUnidades = ({setVerunidades,jobId}) => {
         });
         setUnidadesJobs(newGrupo);
     }
-
     const guardarUnidadesTareas = e => {
         e.preventDefault();
         console.log(unidadesJobs);
@@ -94,7 +89,7 @@ const VerUnidades = ({setVerunidades,jobId}) => {
     }
     return (
         <Container className="popoverPanale">
-            <Card style={{ width: '50rem', marginTop:"10px" }}>
+            <Card style={{ width: '55rem', marginTop:"10px" }}>
                 <Card.Body>
                     {/** */}
                     <Row>
@@ -113,7 +108,7 @@ const VerUnidades = ({setVerunidades,jobId}) => {
                                                     className="unidad"
                                                     onDragStart={e => drag(e)}
                                                 >
-                                                    <span><FaLock size={20} /> Unidad: {unidad.nm}</span>
+                                                    <span style={{ float: "left" }} ><FaLock size={20} /> Unidad: {unidad.nm}</span>
                                                     <input className="checbokUnidad white" id={"checboxUnidad"+unidad.id} type="checkbox"  />
                                                     <br></br>
                                                 </div>
@@ -137,9 +132,11 @@ const VerUnidades = ({setVerunidades,jobId}) => {
                                                     className="unidad"
                                                     onDragStart={e => drag(e)}
                                                 >
-                                                    <span><FaLock size={20} /> Unidad: {
-                                                        unidades.filter(unidadG => (unidadG.id === unidad))[0].nm
-                                                    }</span>
+                                                    <span style={{ float: "left" }}><FaLock size={20} /> Unidad: 
+                                                        {
+                                                            unidades.filter(unidadG => (unidadG.id === unidad))[0].nm
+                                                        }
+                                                    </span>
                                                     <input className="checbokUnidad white" id={"checboxUnidadJob"+unidad} type="checkbox"  />
                                                     <br></br>
                                                 </div>

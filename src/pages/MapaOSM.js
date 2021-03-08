@@ -2,7 +2,7 @@ import React from 'react';
 import { MapContainer, TileLayer, MapConsumer } from 'react-leaflet'
 import UnidadesMapa from "./UnidadesMapa";
 const MapaOSM = ({marketPosition}) => {
-  return ( 
+  return (
     <MapContainer className="map" center={marketPosition} zoom={15} scrollWheelZoom={false} style={{height: '400px; !important'}} >
       <MapConsumer>
         {(map) => {

@@ -29,7 +29,6 @@ export function getGroupsAction(wialonObjeto) {
                     }
                 });
             });
-
         } catch (error) {
             dispatch( getGroupsError() )
             console.log(error);
@@ -140,16 +139,18 @@ export function deleteGroupAction(IdGroup,wialonObjeto) {
         try {
             new Promise(() => {
             wialonObjeto.deleteGroup(IdGroup,function(data) {
-                console.log(data);
-                if (data.error) {
-                    dispatch( deleteGroupsError() );
-                } else {
-                    dispatch( deleteGroupsExito(IdGroup) );
-                }
+                    console.log(data);
+                    if (data.error) {
+                        dispatch( deleteGroupsError() );
+                    } else {
+                        dispatch( deleteGroupsExito(IdGroup) );
+                    }
+                    Swal.close();
                 });
             });
         } catch (error) {
-            dispatch( deleteGroupsError() )
+            dispatch( deleteGroupsError() );
+            Swal.close();
             console.log(error);
         }
     }

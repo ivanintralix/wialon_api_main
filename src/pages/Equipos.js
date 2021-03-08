@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Card, Container, Row, Col, Form, Spinner } from 'react-bootstrap';
 import { FaLock, FaSearch } from 'react-icons/fa';
 import { addUnitsGroupAction, createGroupAction, deleteGroupAction } from "../store/actions/gruposActions";
+import Swal from 'sweetalert2';
 
 const Equipos = () => {
     const dispatch = useDispatch();
@@ -17,11 +18,10 @@ const Equipos = () => {
     const [ idGroup, setIdGroup] = useState(grupos[0] === undefined ? null : grupos[0].d.id);
     const [ flagCreateGroup, setFlagCreateGroup ] = useState(false);
     const [ cofirmDelete, setCofirmDelete ] = useState(false);
-
+    //console.log(unidades.find(unidad2 => 133 === unidad2.id));
     useEffect(() => {
         if (!loadingEquipos) {
             setFlagCreateGroup(false);
-            
         }
         if(!cofirmDelete){
             setCofirmDelete(false);
@@ -34,22 +34,22 @@ const Equipos = () => {
     }
     const drop = e => {
         e.preventDefault();
+        const arrayTemp = [];
         const data = e.dataTransfer.getData("text");
         var repite = unidadesGrupo.filter(unidad => parseInt(data) === unidad );
         if (repite.length <= 0) {
-            setUnidadesGrupo([...unidadesGrupo,parseInt(data)]);
+            arrayTemp.push(parseInt(data));
         }
         unidades.map(unidadGrupo => {
-            const UC = document.getElementById("checbokUnidadGrupo" + unidadGrupo);
-            if (UC !== null) {
-                if (UC.checked) {
-                    repite = unidadesGrupo.filter(unidad => parseInt(unidadGrupo) === unidad );
-                    if (repite.length <= 0) {
-                        setUnidadesGrupo([...unidadesGrupo,parseInt(unidadGrupo)]);
-                    }
+            const UC = document.getElementById("checbokUnidadGrupo" + unidadGrupo.id);
+            if (parseInt(data) !== unidadGrupo.id && UC !== null && UC.checked) {
+                repite = unidadesGrupo.filter(unidad => parseInt(unidadGrupo.id) === unidad );
+                if (repite.length <= 0) {
+                    arrayTemp.push(parseInt(unidadGrupo.id));
                 }
             }
         });
+        setUnidadesGrupo(unidadesGrupo.concat(arrayTemp));
     }
     const dropUnidades = e => {
         e.preventDefault();
@@ -101,7 +101,26 @@ const Equipos = () => {
     }
     const confirmDelete = e => {
         e.preventDefault();
-        setCofirmDelete(true);
+        Swal.fire({
+            title: `Se eliminara el grupo ${tituloGrupo}`,
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#ffc107',
+            confirmButtonText: `Eliminar`,
+        }).then((result) => {
+            console.log(result)
+            if (result.value) {
+                //Swal.fire('Comando enviado!', '', 'success')
+                Swal.fire('Enviando comando', '', '')
+                //cmd(arrayUID,comandoString);
+                dispatch(deleteGroupAction(idGroup,wialonObject));
+                Swal.showLoading();
+            } else if (result.dismiss) {
+                Swal.close()
+            }
+        })
+        //setCofirmDelete(true);
     }
     const cancelDelete = e => {
         e.preventDefault();
@@ -201,7 +220,7 @@ const Equipos = () => {
                                                             onDragStart={e => drag(e)}
                                                         >
                                                             <span><FaLock size={20} /> Unidad: {unidad.nm}</span>
-                                                            <input className="checbokUnidad white" id={"checbokUnidadGrupo"+unidad} type="checkbox"  />
+                                                            <input className="checbokUnidad white" id={"checbokUnidadGrupo"+unidad.id} type="checkbox"  />
                                                             <br></br>
                                                         </div>
                                                 ))
@@ -224,7 +243,7 @@ const Equipos = () => {
                                                         className="unidad"
                                                         onDragStart={e => drag(e)}
                                                     >
-                                                        <span><FaLock size={20} /> Unidad: {(unidades.filter(unidad2 => unidad === unidad2.id))[0].nm}</span>
+                                                        <span><FaLock size={20} /> Unidad: {(unidades.find(unidad2 => unidad === unidad2.id)).nm}</span>
                                                         <input className="checbokUnidad white" id={"checbokUnidadGrupo"+unidad} type="checkbox"  />
                                                         <br></br>
                                                     </div>
@@ -258,7 +277,7 @@ const Equipos = () => {
                     null
             }
             {
-                cofirmDelete ? 
+                cofirmDelete ?
                     <Container className="popoverPanale">
                         <Card style={{ width: '18rem', marginTop:"10px" }}>
                             <Card.Body>
@@ -271,8 +290,7 @@ const Equipos = () => {
                 :
                     null
             }
-        </Main>     
+        </Main>
     );
 }
- 
 export default Equipos;

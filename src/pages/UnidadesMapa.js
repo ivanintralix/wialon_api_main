@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from "react-redux";
 import { Marker, Popup } from 'react-leaflet'
-
+import { FaLock, FaSearch } from 'react-icons/fa';
 const UnidadesMapa = () => {
 
     const jobs = useSelector(state => state.tareas.tareas);
