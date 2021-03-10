@@ -18,7 +18,6 @@ const Equipos = () => {
     const [ idGroup, setIdGroup] = useState(grupos[0] === undefined ? null : grupos[0].d.id);
     const [ flagCreateGroup, setFlagCreateGroup ] = useState(false);
     const [ cofirmDelete, setCofirmDelete ] = useState(false);
-    //console.log(unidades.find(unidad2 => 133 === unidad2.id));
     useEffect(() => {
         if (!loadingEquipos) {
             setFlagCreateGroup(false);
